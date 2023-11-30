@@ -15,7 +15,7 @@ import com.idormy.sms.forwarder.utils.DATABASE_NAME
 @Database(
     entities = [Frpc::class, Msg::class, Logs::class, Rule::class, Sender::class],
     views = [LogsDetail::class],
-    version = 15,
+    version = 18,
     exportSchema = false
 )
 @TypeConverters(ConvertersDate::class)
@@ -96,6 +96,9 @@ custom_domains = smsf.demo.com
                     MIGRATION_12_13,
                     MIGRATION_13_14,
                     MIGRATION_14_15,
+                    MIGRATION_15_16,
+                    MIGRATION_16_17,
+                    MIGRATION_17_18
                 )
 
             /*if (BuildConfig.DEBUG) {
@@ -361,6 +364,28 @@ CREATE TABLE "Logs" (
             override fun migrate(database: SupportSQLiteDatabase) {
                 // 这里新建一个视图（视图名称要用两个半角的间隔号括起来）
                 database.execSQL("CREATE VIEW `LogsDetail` AS SELECT LOGS.id,LOGS.type,LOGS.msg_id,LOGS.rule_id,LOGS.sender_id,LOGS.forward_status,LOGS.forward_response,LOGS.TIME,Rule.filed AS rule_filed,Rule.`check` AS rule_check,Rule.value AS rule_value,Rule.sim_slot AS rule_sim_slot,Sender.type AS sender_type,Sender.NAME AS sender_name FROM LOGS  LEFT JOIN Rule ON LOGS.rule_id = Rule.id LEFT JOIN Sender ON LOGS.sender_id = Sender.id")
+            }
+        }
+
+        //免打扰(禁用转发)时间段
+        private val MIGRATION_15_16 = object : Migration(15, 16) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("Alter table rule add column silent_period_start INTEGER NOT NULL DEFAULT 0 ")
+                database.execSQL("Alter table rule add column silent_period_end INTEGER NOT NULL DEFAULT 0 ")
+            }
+        }
+
+        //通话类型：1.来电挂机 2.去电挂机 3.未接来电 4.来电提醒 5.来电接通 6.去电拨出
+        private val MIGRATION_16_17 = object : Migration(16, 17) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("Alter table Msg add column call_type INTEGER NOT NULL DEFAULT 0")
+            }
+        }
+
+        //规则配置增加uid条件
+        private val MIGRATION_17_18 = object : Migration(17, 18) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("Alter table rule add column uid INTEGER NOT NULL DEFAULT 0 ")
             }
         }
 

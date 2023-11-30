@@ -10,6 +10,7 @@
     <string name="menu_rules">转发规则</string>
     <string name="menu_settings">通用设置</string>
 
+    <string name="menu_task">自动任务·快捷指令</string>
     <string name="menu_server">主动控制·服务端</string>
     <string name="menu_client">主动控制·客户端</string>
     <string name="menu_frpc">内网穿透·Frpc</string>
@@ -221,6 +222,7 @@
     <string name="test_phone_number">测试模拟的来源号码</string>
     <string name="test_msg_content">测试模拟的短信内容</string>
     <string name="test_package_name">测试模拟的APP包名</string>
+    <string name="test_call_type">测试模拟的通话类型</string>
     <string name="test_inform_title">测试模拟的通知标题</string>
     <string name="test_inform_content">测试模拟的通知内容</string>
     <string name="sender_logic">执行逻辑</string>
@@ -230,6 +232,7 @@
     <string name="match_sim_slot">匹配卡槽</string>
     <string name="match_field">匹配字段</string>
     <string name="phone_number">手机号</string>
+    <string name="call_type">通话类型</string>
     <string name="package_name">APP包名</string>
     <string name="sms_content">短信内容</string>
     <string name="inform_content">通知内容</string>
@@ -246,6 +249,7 @@
     <string name="switch_rule_status">启用该条转发规则</string>
     <string name="invalid_rule_status">该条转发规则已禁用</string>
     <string name="invalid_match_value">匹配的值不可为空</string>
+    <string name="invalid_call_type">通话类型不正确，只能填写1到6的任意一个数字</string>
     <!--SenderActivity-->
     <string name="invalid_sender">异常的发送通道类型，自动删除！</string>
     <string name="delete_sender_title">发送通道操作确认</string>
@@ -281,6 +285,7 @@
     <string name="invalid_sendkey">Server酱·Turbo版的 SendKey 不能为空</string>
     <string name="invalid_channel">最多两个通道，多个通道值用竖线|隔开</string>
     <string name="invalid_openid">多个 openid 用 , 隔开</string>
+    <string name="invalid_customize_api">自定义API地址 不是有效URL</string>
     <string name="invalid_webserver">WebServer为空 或 不是有效URL</string>
     <string name="invalid_webhook">WebHook为空 或 不是有效URL</string>
     <string name="invalid_url_scheme">URL Scheme 为空 或 无效</string>
@@ -308,6 +313,7 @@
     <string name="feishu_msg_type_text">纯文本</string>
     <string name="feishu_msg_type_interactive">消息卡片</string>
     <string name="feishu_msg_type_interactive_title">标题模板</string>
+    <string name="Customize_API">自定义API</string>
     <string name="Corp_ID">企业ID</string>
     <string name="Agent_ID">AgentId</string>
     <string name="App_Secret">Secret</string>
@@ -321,6 +327,7 @@
     <string name="touser_tips">Tip：接收消息的成员ID列表（多个接收者用‘|’分隔，最多支持1000个）</string>
     <string name="toparty_tips">Tip：接收消息的部门ID列表（多个接收者用‘|’分隔，最多支持1000个）</string>
     <string name="totag_tips">Tip：接收消息的标签ID列表（多个接收者用‘|’分隔，最多支持1000个）</string>
+    <string name="customize_api_tips">Tip：通过反向代理(proxy_pass)绕过IP白名单限制</string>
     <string name="specified_member_tips2">Tip：接收用户的userid，每次最多传20个（用‘|’分隔）</string>
     <string name="server_chan_send_key">SendKey</string>
     <string name="server_chan_channel">消息通道</string>
@@ -375,6 +382,7 @@
     <string name="custom_template_tips">Tip：按需插入内容标签；留空使用默认模版</string>
     <string name="insert_sender">来源号码</string>
     <string name="insert_sender_app">APP包名</string>
+    <string name="insert_uid">UID</string>
     <string name="insert_content">短信内容</string>
     <string name="insert_title_app">通知标题</string>
     <string name="insert_content_app">通知内容</string>
@@ -399,6 +407,8 @@
     <string name="sim1" tools:ignore="Typos">SIM1</string>
     <string name="sim2" tools:ignore="Typos">SIM2</string>
     <string name="mu_rule_sms_tips">多重匹配规则示例：（语法参见wiki）\n\n并且 是 手机号 相等 10086\n[空格]或者 是 手机号 相等 10011\n并且 是 短信内容 包含 欠费\n\n以上规则表示：收到短信，并且（手机号是10086 或者 手机号是10010），并且 短信内容 包含 欠费 时转发短信\n\n注意：每行开始的空格代表层级，太过复杂的多重规则可能导致内存占用很大！</string>
+    <string name="mu_rule_call_tips">多重匹配规则示例：（语法参见wiki）\n\n并且 是 手机号 相等 10086\n[空格]或者 是 手机号 相等 10011\n并且 是 通话类型 相等 3\n\n以上规则表示：收到来电，并且（手机号是10086 或者 手机号是10010），并且 通话类型 是 未接来电 时转发提醒\n\n注意：每行开始的空格代表层级，太过复杂的多重规则可能导致内存占用很大！\n\n通话类型：1.来电挂机 2.去电挂机 3.未接来电 4.来电提醒 5.来电接通 6.去电拨出</string>
+    <string name="call_type_tips">填写数字：1到6的任意一个\n\n通话类型：1.来电挂机 2.去电挂机 3.未接来电 4.来电提醒 5.来电接通 6.去电拨出</string>
     <string name="mu_rule_app_tips">多重匹配规则示例：（语法参见wiki）\n\n并且 是 APP包名 相等 com.tencent.mm\n[空格]或者 是 APP包名 相等 com.tencent.mobileqq\n并且 是 通知内容 包含 欠费\n\n以上规则表示：收到APP通知，并且（APP包名是com.tencent.mm 或者 APP包名是com.tencent.mobileqq），并且 通知内容 包含 欠费 时转发通知\n\n注意：每行开始的空格代表层级，太过复杂的多重规则可能导致内存占用很大！</string>
     <string name="post">POST</string>
     <string name="get">GET</string>
@@ -407,6 +417,7 @@
     <string name="udp">UDP</string>
     <string name="tcp">TCP</string>
     <string name="mqtt">MQTT</string>
+    <string name="ssl">SSL</string>
     <!--CloneActivity-->
     <string name="local_ip">本机IP：</string>
     <string name="operating_instruction">严正声明：\n该功能仅限个人新旧手机切换使用，用于非法用途后果自负！\n\n操作说明：\n1.新旧手机连接同一个WiFi网络(禁用AP隔离)，如需穿透内网请先配置Frpc\n2.【二选一】旧手机点【推送】按钮，将本机的配置推送到服务端\n3.【二选一】新手机点【拉取】按钮，将拉取服务端的配置到本机\n\n注意事项：\n1.客户端与服务端的APP版本必须一致，才能克隆!\n2.导入成功后，发送通道、转发规则将完全被覆盖，清空历史记录！\n3.主动请求、保活措施、个性设置不在克隆范围</string>
@@ -550,6 +561,8 @@
     <string name="active_request_tips">通过 被动接收 或者 主动轮询 获取指令，从而操作本机</string>
     <string name="httpserver">被动接收本地 HttpServer</string>
     <string name="httpserver_tips">WiFi网络下可用，启动后局域网内其他机器可直接调用本机接口</string>
+    <string name="sim_state_monitor">SIM卡槽状态监控</string>
+    <string name="sim_state_monitor_tips">需要手动创建APP转发规则，包名：66666666</string>
     <string name="network_state_monitor">网络状态监控</string>
     <string name="network_state_monitor_tips">需要手动创建APP转发规则，包名：77777777</string>
     <string name="network_state_change_remind">网络状态改变提醒</string>
@@ -566,7 +579,8 @@
     <string name="seconds">秒</string>
     <string name="seconds_n">%s 秒</string>
     <string name="retry">重试</string>
-    <string name="test_sender_sms">【测试通道】恭喜您，该发送通道测试成功，请继续添加转发规则！</string>
+    <string name="test_sender_sms">【%s】恭喜您，该发送通道测试成功，请继续添加转发规则！</string>
+    <string name="test_sender_name">测试通道</string>
     <string name="test_sim_info" tools:ignore="Typos">SIM1_测试运营商_18888888888</string>
     <string name="keep_reminding">持续提醒</string>
     <string name="resend">重发消息</string>
@@ -590,10 +604,14 @@
     <string name="tag_card_slot">{{卡槽信息}}</string>
     <string name="tag_card_subid">{{卡槽主键}}</string>
     <string name="tag_receive_time">{{接收时间}}</string>
+    <string name="tag_current_time">{{当前时间}}</string>
     <string name="tag_device_name">{{设备名称}}</string>
     <string name="tag_app_version">{{当前应用版本号}}</string>
     <string name="tag_title">{{通知标题}}</string>
     <string name="tag_scheme">{{通知Scheme}}</string>
+    <string name="tag_call_type">{{通话类型}}</string>
+    <string name="tag_location">{{定位信息}}</string>
+    <string name="tag_uid">{{UID}}</string>
     <string name="rule_sms">短信</string>
     <string name="rule_call">来电</string>
     <string name="rule_app">应用</string>
@@ -604,6 +622,8 @@
     <string name="rule_multi_match">多重匹配</string>
     <string name="rule_package_name">APP包名</string>
     <string name="rule_inform_content">通知内容</string>
+    <string name="rule_call_type">通话类型</string>
+    <string name="rule_uid">UID</string>
     <string name="rule_card">卡</string>
     <string name="rule_when">当</string>
     <string name="rule_fw_to">转发到</string>
@@ -628,7 +648,7 @@
     <string name="tips_clone_failed">一键克隆失败：</string>
     <string name="tips_versions_inconsistent">APP版本不一致，无法一键克隆！</string>
     <string name="tips_get_info_failed">获取一键克隆信息失败</string>
-    <string name="linkman">通讯录名：</string>
+    <string name="contact">通讯录名：</string>
     <string name="via_number">被呼号码：</string>
     <string name="common_permission_alert">授权提醒</string>
     <string name="common_permission_fail_1">授权失败，请正确授予权限</string>
@@ -690,7 +710,7 @@
     <string name="no">No</string>
     <string name="unknown">---</string>
     <string name="refresh">刷新</string>
-    <string name="tip_can_not_get_sim_infos">请确认应用权限【获取手机信息】为【始终允许】或手动填写</string>
+    <string name="tip_can_not_get_sim_infos">无法获取卡槽信息，请确认应用权限【获取手机信息】为【始终允许】</string>
     <string name="tip_can_not_get_sim_info">未获取到卡槽%s中的SIM卡信息</string>
     <string name="add">添加</string>
     <string name="check_update">检查更新</string>
@@ -700,9 +720,9 @@
     <string name="sender_name_status">通道名称/状态</string>
     <string name="choose_sender_status">发送通道/状态</string>
 
-    <string name="dingtalk_token">Token（不含链接）</string>
-    <string name="dingtalk_token_tips">例：https://oapi.dingtalk.com/robot/send?access_token=XXX 中的 XXX</string>
-    <string name="dingtalk_token_hint">机器人设置→webhook→access_token</string>
+    <string name="dingtalk_token">Webhook</string>
+    <string name="dingtalk_token_tips">例：https://oapi.dingtalk.com/robot/send?access_token=XXX</string>
+    <string name="dingtalk_token_hint">机器人设置→webhook</string>
     <string name="dingtalk_secret">加签 Secret</string>
     <string name="dingtalk_secret_hint">机器人设置→安全设置→加签</string>
     <string name="dingtalk_at_mobiles">被@人的手机号</string>
@@ -771,6 +791,8 @@
     <string name="msg_template">Params</string>
     <string name="webhook_params_tips" formatted="false">例如：payload=%7B%22text%22%3A%22[msg]%22%7D [msg]将被替换成短信内容。\n支持Json格式，例如：{\"text\":\"[msg]\"}。\n注意：除JSON格式外，msg会自动进行URLEncoder</string>
     <string name="webhook_secret">Secret：置空则不计算sign</string>
+    <string name="webhook_response">成功应答关键字：置空则http状态200即为成功</string>
+    <string name="webhook_response2">成功应答关键字：置空则发出即成功</string>
     <string name="headers">Headers</string>
     <string name="header_key">Key</string>
     <string name="header_value">Value</string>
@@ -785,7 +807,7 @@
     <string name="extra_app">额外消除应用通知</string>
     <string name="extra_app_hint">一行一个包名\n开启异步加载App列表以便选择</string>
     <string name="choose_app_hint">下拉选择获取包名，关键字模糊匹配APP名称</string>
-    <string name="regex_multi_match" tools:ignore="TypographyDashes">^\\s*(并且|或者)\\s(是|不是)\\s(手机号|APP包名|短信内容|通知内容|通知标题|卡槽信息)\\s(相等|包含|不包含|开头|结尾|正则匹配)\\s(.*)$</string>
+    <string name="regex_multi_match" tools:ignore="TypographyDashes">^\\s*(并且|或者)\\s(是|不是)\\s(手机号|APP包名|短信内容|通知内容|通知标题|卡槽信息|通话类型)\\s(相等|包含|不包含|开头|结尾|正则匹配)\\s(.*)$</string>
     <string name="privacy_content_1">欢迎使用</string>
     <string name="privacy_content_2">我们深知个人信息对你的重要性，也感谢你对我们的信任。\n</string>
     <string name="privacy_content_3">为了更好地保护你的权益，同时遵守相关监管的要求，我们将通过 </string>
@@ -819,9 +841,11 @@
     <string name="FILED_PHONE_NUM">手机号</string>
     <string name="FILED_MSG_CONTENT">短信内容</string>
     <string name="FILED_PACKAGE_NAME">APP包名</string>
+    <string name="FILED_UID">UID</string>
     <string name="FILED_INFORM_TITLE">通知标题</string>
     <string name="FILED_INFORM_CONTENT">通知内容</string>
     <string name="FILED_SIM_SLOT_INFO">卡槽信息</string>
+    <string name="FILED_CALL_TYPE">通话类型</string>
     <string name="SURE_YES">是</string>
     <string name="SURE_NOT">不是</string>
     <string name="CHECK_EQUALS">相等</string>
@@ -982,13 +1006,14 @@
     <string name="appsecret">AppSecret</string>
     <string name="sampleText">文本类型</string>
     <string name="sampleMarkdown">Markdown类型</string>
-    <string name="ip_hint">可选，主机IP/广播地址，例如：192.168.1.255</string>
+    <string name="ip_hint">可选，内网广播地址，例如：192.168.1.255</string>
     <string name="ip_error">IP地址格式错误，例如：192.168.168.168</string>
     <string name="ip_regex" tools:ignore="TypographyDashes">^((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\.){3}(\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])$</string>
     <string name="mac_hint">必填，网卡mac，例如：AA:BB:CC:DD:EE:FF</string>
     <string name="mac_error">网卡mac格式错误，例如：AA:BB:CC:DD:EE:FF</string>
     <string name="mac_regex" tools:ignore="TypographyDashes">^((([a-fA-F0-9]{2}:){5})|(([a-fA-F0-9]{2}-){5}))[a-fA-F0-9]{2}$</string>
-    <string name="ip">主机IP/广播地址</string>
+    <string name="broadcast_address">内网广播地址</string>
+    <string name="ip">IP</string>
     <string name="mac">网卡MAC</string>
     <string name="no_wol_history">暂无历史记录，WOL发送成功后自动加入</string>
     <string name="wol_port_hint">可选，WOL一般透过端口7或端口9进行发送</string>
@@ -1032,4 +1057,28 @@
     <string name="operator_name">运营商</string>
     <string name="host_address">本地IP</string>
     <string name="loading_app_list">正在异步加载应用列表...</string>
+
+    <string name="carrier_name">运营商名</string>
+    <string name="icc_id">ICC ID</string>
+    <string name="sim_slot_index">卡槽索引</string>
+    <string name="data_sim_index">数据卡槽</string>
+    <string name="number">手机号码</string>
+    <string name="country_iso">国家代码</string>
+    <string name="subscription_id">订阅标识</string>
+
+    <string name="net_no">没有网络</string>
+    <string name="net_2g">2G网络</string>
+    <string name="net_3g">3G网络</string>
+    <string name="net_4g">4G网络</string>
+    <string name="net_5g">5G网络</string>
+    <string name="net_wifi">WiFi</string>
+    <string name="net_ethernet">有线网络</string>
+    <string name="net_unknown">未知网络</string>
+    <string name="wifi_ssid">WiFi名称</string>
+
+    <string name="enable_location_tag">启用 {{定位信息}} 标签</string>
+    <string name="enable_location_tag_tips">在转发信息中插入手机的当前定位信息</string>
+    <string name="uid">UID</string>
+
+    <string name="select_task_type">请选择自动任务类型</string>
 </resources>

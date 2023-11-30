@@ -10,6 +10,7 @@
     <string name="menu_rules">Rules</string>
     <string name="menu_settings">Settings</string>
 
+    <string name="menu_task">Task</string>
     <string name="menu_server">Server</string>
     <string name="menu_client">Client</string>
     <string name="menu_frpc">Frpc</string>
@@ -220,6 +221,7 @@
     <string name="test_phone_number">Test Phone Number</string>
     <string name="test_msg_content">Test Msg Content</string>
     <string name="test_package_name">Test PackageName</string>
+    <string name="test_call_type">Test Call Type</string>
     <string name="test_inform_title">Test Notify Title</string>
     <string name="test_inform_content">Test Notify Content</string>
     <string name="sender_logic">Run Logic</string>
@@ -229,6 +231,7 @@
     <string name="match_sim_slot">SIM Slot</string>
     <string name="match_field">Field</string>
     <string name="phone_number">Phone No.</string>
+    <string name="call_type">Call Type</string>
     <string name="package_name">PkgName</string>
     <string name="sms_content">SMS</string>
     <string name="inform_content">Notice</string>
@@ -245,6 +248,7 @@
     <string name="switch_rule_status">Enable This Forwarding Rule</string>
     <string name="invalid_rule_status">The forwarding rule is disabled</string>
     <string name="invalid_match_value">The matched value cannot be null</string>
+    <string name="invalid_call_type">The call type is incorrect, you can only enter any number from 1 to 6.</string>
     <!--SenderActivity-->
     <string name="invalid_sender">Invalid sender, abort!</string>
     <string name="delete_sender_title">Delete confirmation</string>
@@ -280,8 +284,9 @@
     <string name="invalid_sendkey">SendKey cannot be empty</string>
     <string name="invalid_channel">Up to two channels, multiple channel values separated by a vertical bar |</string>
     <string name="invalid_openid">Multiple openids are separated by ,</string>
-    <string name="invalid_webserver">WebServer is empty or not a valid URL</string>
-    <string name="invalid_webhook">WebHook is empty or not a valid URL</string>
+    <string name="invalid_customize_api">Customize API is invalid</string>
+    <string name="invalid_webserver">WebServer is empty or invalid</string>
+    <string name="invalid_webhook">WebHook is empty or invalid</string>
     <string name="invalid_url_scheme">URL Scheme is empty or invalid</string>
     <string name="invalid_at_mobiles">toUser/toParty/toTag cannot be empty or select @all</string>
     <string name="invalid_wework_agent">CoreID, AgentID, and Secret cannot be empty</string>
@@ -307,6 +312,7 @@
     <string name="feishu_msg_type_text">Text</string>
     <string name="feishu_msg_type_interactive">Interactive</string>
     <string name="feishu_msg_type_interactive_title">Interactive Title</string>
+    <string name="Customize_API">Customize API</string>
     <string name="Corp_ID">Corp ID</string>
     <string name="Agent_ID">Agent ID</string>
     <string name="App_Secret">App Secret</string>
@@ -320,6 +326,7 @@
     <string name="touser_tips">Tip: List of member IDs that receive messages (multiple recipients are separated by \'|\', up to 1000)</string>
     <string name="toparty_tips">Tip: List of party IDs that receive messages (multiple recipients are separated by \'|\', up to 1000)</string>
     <string name="totag_tips">Tip: List of tag IDs that receive messages (multiple recipients are separated by \'|\', up to 1000)</string>
+    <string name="customize_api_tips">Tip: Bypass IP whitelist restrictions using reverse proxy (proxy_pass).</string>
     <string name="specified_member_tips2">Tip: The userid of the user who receives the message, up to 20 at a time (separated by \'|\')</string>
     <string name="server_chan_send_key">SendKey</string>
     <string name="server_chan_channel">Message Channel</string>
@@ -374,6 +381,7 @@
     <string name="custom_template_tips">Tip: Insert labels as needed; Leave blank to apply default template</string>
     <string name="insert_sender">Phone</string>
     <string name="insert_sender_app">PackageName</string>
+    <string name="insert_uid">UID</string>
     <string name="insert_content">SMS</string>
     <string name="insert_title_app">InformTitle</string>
     <string name="insert_content_app">InformContent</string>
@@ -398,6 +406,8 @@
     <string name="sim1" tools:ignore="Typos">SIM1</string>
     <string name="sim2" tools:ignore="Typos">SIM2</string>
     <string name="mu_rule_sms_tips">Example of multiple matching rules: (see wiki for syntax)\n\nAND IS PHONE_NUM EQUALS 10086\n[space]OR IS PHONE_NUM EQUALS 10011\nAND IS MSG_CONTENT CONTAIN arrears\n\nThe above rule means: receive a text message, and (the mobile phone number is 10086 or the mobile phone number is 10010), and the content of the text message includes arrears When forwarding the text message\n\nNote: The space at the beginning of each line represents the level, too complex multiple rules may lead to a large memory usage!</string>
+    <string name="mu_rule_call_tips">Example of multiple matching rules: (see wiki for syntax)\n\nAND IS PHONE_NUM EQUALS 10086\n[space]OR IS PHONE_NUM EQUALS 10011\nAND IS CALL_TYPE IS 3\n\nThe above rule means: receive a call, and (the mobile phone number is 10086 or 10010), and the call type is Missed When forwarding the call\n\nNote: The space at the beginning of each line represents the level, too complex multiple rules may lead to a large memory usage!\n\nCall types: 1.Incoming Ended 2.Outgoing Ended 3.Missed 4.Incoming Received 5.Incoming Answered 6.Outgoing Started</string>
+    <string name="call_type_tips">Enter any number from 1 to 6.\n\nCall types: 1.Incoming Ended 2.Outgoing Ended 3.Missed 4.Incoming Received 5.Incoming Answered 6.Outgoing Started</string>
     <string name="mu_rule_app_tips">Example of multiple matching rules: (see wiki for syntax)\n\nAND IS PACKAGE_NAME EQUALS com.tencent.mm\n[space]OR IS PACKAGE_NAME EQUALS com.tencent.mobileqq\nAND IS INFORM_CONTENT CONTAIN arrears\n\nThe above rules mean: Receive an APP notification, and (the APP package name is com.tencent.mm or the APP package name is com.tencent.mobileqq), and the content of the notification includes forwarding the notification when the payment is in arrears\n\nNote: The space at the beginning of each line represents the level, too complex multiple rules may lead to a large memory usage!</string>
     <string name="post">POST</string>
     <string name="get">GET</string>
@@ -406,6 +416,7 @@
     <string name="udp">UDP</string>
     <string name="tcp">TCP</string>
     <string name="mqtt">MQTT</string>
+    <string name="ssl">SSL</string>
     <!--CloneActivity-->
     <string name="local_ip">Local IP: </string>
     <string name="operating_instruction">Instructions: \n[Note] The APP version of the sender and receiver must be the same!\n1. Please keep the SOURCE and DESTINATION phones in the same Wi-Fi network, and do not turn on isolation. \n2. Tap "Send" on SOURCE mobile phone, and get "server IP" \n3. After filling in "Server IP" on DESTINATION phone, tap "Receive". \n [NOTE:] sender(s), forwarding rule(s) and log(s) will be overwritten after cloning!</string> <!-- 原文是“新旧手机”，英文翻译中处理为“源”手机和“目标”手机，因为担心“新旧”的表述引起混淆（有没一种可能就是用户就是用从新手机的设备复制到旧手机上去呢？）。 -->
@@ -549,6 +560,8 @@
     <string name="active_request_tips">Obtain instructions through passive reception or active polling to operate the machine</string>
     <string name="httpserver">Local HttpServer</string>
     <string name="httpserver_tips">Available under WiFi network, after startup, other machines in the LAN can directly call the local interface</string>
+    <string name="sim_state_monitor">SIM State Monitor</string>
+    <string name="sim_state_monitor_tips">[Note] You need to manually create APP forwarding rules, package name: 66666666</string>
     <string name="network_state_monitor">Network State Monitor</string>
     <string name="network_state_monitor_tips">[Note] You need to manually create APP forwarding rules, package name: 77777777</string>
     <string name="network_state_change_remind">Network State Change Remind</string>
@@ -565,7 +578,8 @@
     <string name="seconds">secs</string>
     <string name="seconds_n">%s sec</string>
     <string name="retry">Retry</string>
-    <string name="test_sender_sms">[Test Channel] Congratulations, the sending channel test is successful, please continue to add forwarding rules!</string>
+    <string name="test_sender_sms">[%s] Congratulations, the sending channel test is successful, please continue to add forwarding rules!</string>
+    <string name="test_sender_name">Test Channel</string>
     <string name="test_sim_info" tools:ignore="Typos">SIM1_TestOperator_18888888888</string>
     <string name="keep_reminding">Continued</string>
     <string name="resend">Resend</string>
@@ -589,10 +603,14 @@
     <string name="tag_card_slot">{{CARD_SLOT}}</string>
     <string name="tag_card_subid">{{CARD_SUBID}}</string>
     <string name="tag_receive_time">{{RECEIVE_TIME}}</string>
+    <string name="tag_current_time">{{CURRENT_TIME}}</string>
     <string name="tag_device_name">{{DEVICE_NAME}}</string>
     <string name="tag_app_version">{{APP_VERSION}}</string>
     <string name="tag_title">{{TITLE}}</string>
     <string name="tag_scheme">{{SCHEME}}</string>
+    <string name="tag_call_type">{{CALL_TYPE}}</string>
+    <string name="tag_location">{{LOCATION}}</string>
+    <string name="tag_uid">{{UID}}</string>
     <string name="rule_sms">SMS</string>
     <string name="rule_call">CALL</string>
     <string name="rule_app">APP</string>
@@ -603,6 +621,8 @@
     <string name="rule_multi_match">Multi Match</string>
     <string name="rule_package_name">Package Name</string>
     <string name="rule_inform_content">Inform Content</string>
+    <string name="rule_call_type">Call Type</string>
+    <string name="rule_uid">UID</string>
     <string name="rule_card">Card</string>
     <string name="rule_when">When</string>
     <string name="rule_fw_to">Fw.</string>
@@ -627,7 +647,7 @@
     <string name="tips_clone_failed">One-click clone failed:</string>
     <string name="tips_versions_inconsistent">The APP versions of the sender and the receiver are inconsistent, and cannot be cloned with one click!</string>
     <string name="tips_get_info_failed">Failed to get one-click clone information from sender</string>
-    <string name="linkman">Linkman:</string>
+    <string name="contact">Contact:</string>
     <string name="via_number">Via Number:</string>
     <string name="common_permission_alert">Permission Alert</string>
     <string name="common_permission_fail_1">Authorization failed, please grant permission correctly</string>
@@ -699,9 +719,9 @@
     <string name="sender_name_status">Channel Name/Status</string>
     <string name="choose_sender_status">Send Channel/Status</string>
 
-    <string name="dingtalk_token">Token (without link)</string>
-    <string name="dingtalk_token_tips">Example: XXX in https://oapi.dingtalk.com/robot/send?access_token=XXX</string>
-    <string name="dingtalk_token_hint">Robot Settings→webhook→access_token</string>
+    <string name="dingtalk_token">Webhook</string>
+    <string name="dingtalk_token_tips">e.g. https://oapi.dingtalk.com/robot/send?access_token=XXX</string>
+    <string name="dingtalk_token_hint">Robot Settings→webhook</string>
     <string name="dingtalk_secret">Secret</string>
     <string name="dingtalk_secret_hint">Robot Settings→Security Settings→Sign Up</string>
     <string name="dingtalk_at_mobiles">At Mobiles</string>
@@ -710,17 +730,17 @@
     <string name="dingtalk_at_dingtalkids_tip">Tips：Separate multiple DingtalkIds with commas, e.g. user1,user2</string>
 
     <string name="bark_server">Bark-Server</string>
-    <string name="bark_server_tips">Example: https://api.day.app/XXXXXXXX/</string>
+    <string name="bark_server_tips">e.g. https://api.day.app/XXXXXXXX/</string>
     <string name="bark_server_regex">^https?://[^/]+/[^/]+/$</string>
     <string name="bark_server_error">The Url format is wrong, e.g. https://api.day.app/XXXXXXXX/</string>
     <string name="bark_group">Group Name</string>
-    <string name="bark_group_tips">Optional, eg: SmsForwarder</string>
+    <string name="bark_group_tips">Optional, e.g. SmsForwarder</string>
     <string name="bark_icon">Message Icon</string>
     <string name="bark_icon_tips">Optional, fill in Url, the picture should not be too big</string>
     <string name="bark_sound">Message Sound</string>
     <string name="bark_sound_tips">Optional, e.g. minuet.caf</string>
     <string name="bark_badge">Message Badge</string>
-    <string name="bark_badge_tips">Optional, eg: 888</string>
+    <string name="bark_badge_tips">Optional, e.g. 888</string>
     <string name="bark_url">Message Link</string>
     <string name="bark_url_tips">Optional, e.g. https://github.com/pppscn/SmsForwarder</string>
     <string name="bark_level">Notification Level</string>
@@ -749,7 +769,7 @@
     <string name="mail_pwd_hint">Fill in the login password or authorization code</string>
 
     <string name="wework_webHook">WebHook</string>
-    <string name="wework_webHook_tips">Example: https://qyapi.weixin.qq.com/cgixx?key=xxx</string>
+    <string name="wework_webHook_tips">e.g. https://qyapi.weixin.qq.com/cgixx?key=xxx</string>
     <string name="wework_msg_type">Msg Type</string>
     <string name="wework_msg_type_text">Text</string>
     <string name="wework_msg_type_markdown">Markdown</string>
@@ -759,17 +779,19 @@
 
     <string name="socket">Socket</string>
     <string name="socket_tips">Example：myapp://api/add?&amp;type=0&amp;msg=[msg]</string>
-    <string name="socket_address">服务地址</string>
-    <string name="socket_address_tips">IP 或 域名</string>
-    <string name="socket_port">端口</string>
-    <string name="socket_port_tips">取值范围：1-65535</string>
+    <string name="socket_address">Service Address</string>
+    <string name="socket_address_tips">"IP or Domain"</string>
+    <string name="socket_port">Port</string>
+    <string name="socket_port_tips">Value Range：1-65535</string>
 
     <string name="webhook_server">Webhook Server</string>
     <string name="webhook_server_tips">For example: https://a.b.com/msg?token=xyz</string>
     <string name="webhook_params">Params</string>
     <string name="msg_template">Msg Template</string>
     <string name="webhook_params_tips" formatted="false">For example: payload=%7B%22text%22%3A%22[msg]%22%7D [msg] will be replaced with SMS content.\nJson format is supported, e.g. {\"text\":\"[msg]\"}.\nNote: msg is automatically URLEncoder except in JSON format</string>
-    <string name="webhook_secret">Secret: If it is empty, the sign will not be calculated</string>
+    <string name="webhook_secret">Secret: If left empty, the sign will not be calculated</string>
+    <string name="webhook_response">Successful Response Keyword：If left empty, HTTP status 200 represents success</string>
+    <string name="webhook_response2">Successful Response Keyword：Leaving it blank means sending is considered as successful.</string>
     <string name="headers">Headers</string>
     <string name="header_key">Key</string>
     <string name="header_value">Value</string>
@@ -784,7 +806,7 @@
     <string name="extra_app">Extra Apps</string>
     <string name="extra_app_hint">One package name per line\nEnable async loading of the App list for selection.</string>
     <string name="choose_app_hint">Drop-down selection to get package name, keyword fuzzy matching APP name</string>
-    <string name="regex_multi_match" tools:ignore="TypographyDashes">^\\s*(AND|OR)\\s(IS|NOTIS)\\s(PHONE_NUM|PACKAGE_NAME|MSG_CONTENT|INFORM_CONTENT|INFORM_TITLE|CARD_SLOT)\\s(EQUALS|CONTAIN|NOTCONTAIN|STARTWITH|ENDWITH|REGEX)\\s(.*)$</string>
+    <string name="regex_multi_match" tools:ignore="TypographyDashes">^\\s*(AND|OR)\\s(IS|NOTIS)\\s(PHONE_NUM|PACKAGE_NAME|MSG_CONTENT|INFORM_CONTENT|INFORM_TITLE|CARD_SLOT|CALL_TYPE)\\s(EQUALS|CONTAIN|NOTCONTAIN|STARTWITH|ENDWITH|REGEX)\\s(.*)$</string>
     <string name="privacy_content_1">Welcome to</string>
     <string name="privacy_content_2">We understand the importance of personal information to you and thank you for your trust in us.\n</string>
     <string name="privacy_content_3">In order to better protect your rights and comply with relevant regulatory requirements, we will pass "</string>
@@ -818,9 +840,11 @@
     <string name="FILED_PHONE_NUM">PHONE_NUM</string>
     <string name="FILED_MSG_CONTENT">MSG_CONTENT</string>
     <string name="FILED_PACKAGE_NAME">PACKAGE_NAME</string>
+    <string name="FILED_UID">UID</string>
     <string name="FILED_INFORM_TITLE">INFORM_TITLE</string>
     <string name="FILED_INFORM_CONTENT">INFORM_CONTENT</string>
     <string name="FILED_SIM_SLOT_INFO">CARD_SLOT</string>
+    <string name="FILED_CALL_TYPE">CALL_TYPE</string>
     <string name="SURE_YES">IS</string>
     <string name="SURE_NOT">NOTIS</string>
     <string name="CHECK_EQUALS">EQUALS</string>
@@ -862,9 +886,9 @@
     <string name="api_sms_query_tips">Remotely check SMS records as a supplement to the SMS forwarding function</string>
     <string name="api_call_query">Query Call</string>
     <string name="api_call_query_tips">Remotely check call records, including incoming calls, outgoing calls, and missed calls</string>
-    <string name="api_contact_query">Query Linkman</string>
+    <string name="api_contact_query">Query Contacts</string>
     <string name="api_contact_query_tips">Remotely check contact list</string>
-    <string name="api_contact_add">Add Linkman</string>
+    <string name="api_contact_add">Add Contact</string>
     <string name="api_contact_add_tips">Remotely add contact</string>
     <string name="api_battery_query">Query Battery</string>
     <string name="api_battery_query_tips">Remotely query mobile phone power and battery status</string>
@@ -981,12 +1005,13 @@
     <string name="appsecret">AppSecret</string>
     <string name="sampleText">Text</string>
     <string name="sampleMarkdown">Markdown</string>
-    <string name="ip_hint">IP address/broadcast address, eg. 192.168.1.255</string>
+    <string name="ip_hint">Broadcast Address, eg. 192.168.1.255</string>
     <string name="ip_error">Malformed IP address, eg. 192.168.168.168</string>
     <string name="ip_regex" tools:ignore="TypographyDashes">^((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])\.){3}(\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])$</string>
     <string name="mac_hint">Network card mac, eg. AA:BB:CC:DD:EE:FF</string>
     <string name="mac_error">The network card mac format is incorrect, eg. AA:BB:CC:DD:EE:FF</string>
     <string name="mac_regex" tools:ignore="TypographyDashes">^((([a-fA-F0-9]{2}:){5})|(([a-fA-F0-9]{2}-){5}))[a-fA-F0-9]{2}$</string>
+    <string name="broadcast_address">Broadcast Address</string>
     <string name="ip">IP</string>
     <string name="mac">MAC</string>
     <string name="no_wol_history">There is no history record, WOL will be added automatically after successful sending</string>
@@ -1031,4 +1056,28 @@
     <string name="operator_name">Operator Name</string>
     <string name="host_address">Host Address</string>
     <string name="loading_app_list">Loading app list async...</string>
+
+    <string name="carrier_name">Carrier Name</string>
+    <string name="icc_id">ICC ID</string>
+    <string name="sim_slot_index">Sim Slot Index</string>
+    <string name="data_sim_index">Data Sim Slot</string>
+    <string name="number">Number</string>
+    <string name="country_iso">Country</string>
+    <string name="subscription_id">Subscription ID</string>
+
+    <string name="net_no">No Net</string>
+    <string name="net_2g">2G Net</string>
+    <string name="net_3g">3G Net</string>
+    <string name="net_4g">4G Net</string>
+    <string name="net_5g">5G Net</string>
+    <string name="net_wifi">WiFi</string>
+    <string name="net_ethernet">Ethernet</string>
+    <string name="net_unknown">Unknown</string>
+    <string name="wifi_ssid">WiFi SSID</string>
+
+    <string name="enable_location_tag">Enable {{LOCATION}} Tag</string>
+    <string name="enable_location_tag_tips">Insert location info into forwarded msg.</string>
+    <string name="uid">UID</string>
+
+    <string name="select_task_type">Please select task type</string>
 </resources>

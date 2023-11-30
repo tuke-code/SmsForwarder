@@ -5,6 +5,8 @@ import android.text.TextUtils
 import android.util.Log
 import com.idormy.sms.forwarder.App
 import com.idormy.sms.forwarder.R
+import com.idormy.sms.forwarder.utils.CALL_TYPE_MAP
+import com.idormy.sms.forwarder.utils.HttpServerUtils
 import com.idormy.sms.forwarder.utils.SettingUtils
 import com.idormy.sms.forwarder.utils.SettingUtils.Companion.enableSmsTemplate
 import com.idormy.sms.forwarder.utils.SettingUtils.Companion.extraDeviceMark
@@ -15,7 +17,7 @@ import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 
-@Suppress("unused")
+@Suppress("unused", "DEPRECATION")
 data class MsgInfo(
     var type: String = "sms",
     var from: String,
@@ -24,6 +26,8 @@ data class MsgInfo(
     var simInfo: String,
     var simSlot: Int = -1, //卡槽id：-1=获取失败、0=卡槽1、1=卡槽2
     var subId: Int = 0, //卡槽主键
+    var callType: Int = 0, //通话类型：1.来电挂机 2.去电挂机 3.未接来电 4.来电提醒 5.来电接通 6.去电拨出
+    var uid: Int = 0, //APP通知的UID
 ) : Serializable {
 
     val titleForSend: String
@@ -50,11 +54,14 @@ data class MsgInfo(
             .replace(getString(R.string.tag_card_subid), subId.toString())
             .replace(getString(R.string.tag_title), title)
             .replace(getString(R.string.tag_scheme), scheme)
+            .replace(getString(R.string.tag_uid), uid.toString())
             .replace(getString(R.string.tag_receive_time), SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date))
+            .replace(getString(R.string.tag_current_time), SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()))
             .replace(getString(R.string.tag_device_name), deviceMark)
             .replace(getString(R.string.tag_app_version), versionName)
+            .replace(getString(R.string.tag_call_type), CALL_TYPE_MAP[callType.toString()] ?: getString(R.string.unknown_call))
             .trim()
-        return replaceAppName(regexReplace(titleForSend, regexReplace), from)
+        return replaceLocationTag(replaceAppName(regexReplace(titleForSend, regexReplace), from))
     }
 
     val smsVoForSend: String
@@ -96,11 +103,14 @@ data class MsgInfo(
             .replace(getString(R.string.tag_card_subid), subId.toString())
             .replace(getString(R.string.tag_title), title)
             .replace(getString(R.string.tag_scheme), scheme)
+            .replace(getString(R.string.tag_uid), uid.toString())
             .replace(getString(R.string.tag_receive_time), SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date))
+            .replace(getString(R.string.tag_current_time), SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()))
             .replace(getString(R.string.tag_device_name), deviceMark)
             .replace(getString(R.string.tag_app_version), versionName)
+            .replace(getString(R.string.tag_call_type), CALL_TYPE_MAP[callType.toString()] ?: getString(R.string.unknown_call))
             .trim()
-        return replaceAppName(regexReplace(smsVoForSend, regexReplace), from)
+        return replaceLocationTag(replaceAppName(regexReplace(smsVoForSend, regexReplace), from))
     }
 
     //正则替换内容
@@ -125,6 +135,9 @@ data class MsgInfo(
 
     //替换{{APP名称}}标签
     private fun replaceAppName(content: String, packageName: String): String {
+        if (TextUtils.isEmpty(content)) return content
+        if (content.indexOf(getString(R.string.tag_app_name)) == -1) return content
+
         var appName = ""
         if (SettingUtils.enableLoadUserAppList && App.UserAppList.isNotEmpty()) {
             for (appInfo in App.UserAppList) {
@@ -143,6 +156,15 @@ data class MsgInfo(
             }
         }
         return content.replace(getString(R.string.tag_app_name), appName)
+    }
+
+    //替换 {{定位信息}} 标签
+    private fun replaceLocationTag(content: String): String {
+        if (TextUtils.isEmpty(content)) return content
+        if (content.indexOf(getString(R.string.tag_location)) == -1) return content
+
+        val location = HttpServerUtils.apiLocationCache.toString()
+        return content.replace(getString(R.string.tag_location), location)
     }
 
     override fun toString(): String {

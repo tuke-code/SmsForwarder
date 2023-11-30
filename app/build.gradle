@@ -188,9 +188,11 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //frpc
     implementation files('libs/frpclib.aar')
-    //kmnkt是基于Kotlin Multiplatform的跨平台socket通信统一接口。支持Android目标与JVM目标，支持UDP/TCP/MQTT协议使用同一套接口实现
+
+    //kmnkt基于Kotlin Multiplatform的跨平台socket通信统一接口，支持UDP/TCP/MQTT协议
+    //https://github.com/xuankaicat/kmnkt
     implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
-    implementation files('libs/socket.aar')
+    //implementation files('libs/socket-2.0.0-alpha06-2.aar')
 
     testImplementation deps.junit
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -201,7 +203,7 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.5.5'
     implementation "androidx.cardview:cardview:1.0.0"
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.preference:preference-ktx:1.2.0'
+    implementation 'androidx.preference:preference-ktx:1.2.1'
 
     //分包
     implementation deps.androidx.multidex
@@ -217,8 +219,8 @@ dependencies {
     //屏幕适配AutoSize：https://github.com/JessYanCoding/AndroidAutoSize
     implementation 'me.jessyan:autosize:1.2.1'
     //umeng统计
-    implementation 'com.umeng.umsdk:common:9.5.6'
-    implementation 'com.umeng.umsdk:asms:1.6.3'
+    implementation 'com.umeng.umsdk:common:9.6.5'
+    implementation 'com.umeng.umsdk:asms:1.8.0'
 
     //预加载占位控件
     implementation 'me.samlss:broccoli:1.0.0'
@@ -229,12 +231,12 @@ dependencies {
     //美团多渠道打包
     //implementation 'com.meituan.android.walle:library:1.1.6'
 
-    def work_version = '2.8.0'
+    def work_version = '2.8.1'
     api("androidx.work:work-multiprocess:$work_version")
     api("androidx.work:work-runtime-ktx:$work_version")
 
     //Android Room
-    def room_version = '2.5.0'
+    def room_version = '2.5.2'
     implementation "androidx.room:room-ktx:$room_version"
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-paging:$room_version"
@@ -262,7 +264,7 @@ dependencies {
     testImplementation "androidx.paging:paging-common-ktx:$paging_version"
 
     //权限请求框架：https://github.com/getActivity/XXPermissions
-    implementation 'com.github.getActivity:XXPermissions:18.0'
+    implementation 'com.github.getActivity:XXPermissions:18.2'
 
     def mail_version = '1.6.7'
     implementation "com.sun.mail:android-mail:$mail_version"
@@ -281,9 +283,6 @@ dependencies {
 
     //Location 是一个通过 Android 自带的 LocationManager 来实现的定位功能：https://github.com/jenly1314/Location
     implementation 'com.github.pppscn:location:1.0.0'
-
-    //跨平台socket通信统一接口：https://gitee.com/xuankaicat/kmnkt
-    //implementation 'com.github.pppscn.kmnkt:socket:2.0.0-alpha06'
 }
 //自动添加X-Library依赖
 apply from: 'x-library.gradle'

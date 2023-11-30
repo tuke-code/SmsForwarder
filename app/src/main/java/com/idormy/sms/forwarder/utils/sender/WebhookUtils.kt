@@ -50,8 +50,7 @@ class WebhookUtils {
             val deviceMark: String = SettingUtils.extraDeviceMark
             val appVersion: String = AppUtils.getAppVersionName()
             val simInfo: String = msgInfo.simInfo
-            @SuppressLint("SimpleDateFormat") val receiveTime =
-                SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()) //smsVo.getDate()
+            val receiveTimeTag = Regex("\\[receive_time(:(.*?))?]")
 
             var sign = ""
             if (!TextUtils.isEmpty(setting.secret)) {
@@ -100,7 +99,10 @@ class WebhookUtils {
                     .replace("[app_version]", URLEncoder.encode(appVersion, "UTF-8"))
                     .replace("[title]", URLEncoder.encode(simInfo, "UTF-8"))
                     .replace("[card_slot]", URLEncoder.encode(simInfo, "UTF-8"))
-                    .replace("[receive_time]", URLEncoder.encode(receiveTime, "UTF-8"))
+                    .replace(receiveTimeTag) {
+                        val format = it.groups[2]?.value
+                        URLEncoder.encode(formatDateTime(msgInfo.date, format), "UTF-8")
+                    }
                     .replace("\n", "%0A")
                 if (!TextUtils.isEmpty(setting.secret)) {
                     webParams = webParams.replace("[timestamp]", timestamp.toString())
@@ -122,7 +124,10 @@ class WebhookUtils {
                     .replace("[app_version]", appVersion)
                     .replace("[title]", escapeJson(simInfo))
                     .replace("[card_slot]", escapeJson(simInfo))
-                    .replace("[receive_time]", receiveTime)
+                    .replace(receiveTimeTag) {
+                        val format = it.groups[2]?.value
+                        formatDateTime(msgInfo.date, format)
+                    }
                     .replace("[timestamp]", timestamp.toString())
                     .replace("[sign]", sign)
                 Log.d(TAG, "method = ${setting.method}, Url = $requestUrl, bodyMsg = $bodyMsg")
@@ -154,7 +159,10 @@ class WebhookUtils {
                                 .replace("[app_version]", appVersion)
                                 .replace("[title]", simInfo)
                                 .replace("[card_slot]", simInfo)
-                                .replace("[receive_time]", receiveTime)
+                                .replace(receiveTimeTag) { t ->
+                                    val format = t.groups[2]?.value
+                                    formatDateTime(msgInfo.date, format)
+                                }
                                 .replace("[timestamp]", timestamp.toString())
                                 .replace("[sign]", sign)
                         )
@@ -191,8 +199,9 @@ class WebhookUtils {
 
                     override fun onSuccess(response: String) {
                         Log.i(TAG, response)
-                        SendUtils.updateLogs(logId, 2, response)
-                        SendUtils.senderLogic(2, msgInfo, rule, senderIndex, msgId)
+                        val status = if (!setting.response.isNullOrEmpty() && !response.contains(setting.response)) 0 else 2
+                        SendUtils.updateLogs(logId, status, response)
+                        SendUtils.senderLogic(status, msgInfo, rule, senderIndex, msgId)
                     }
 
                 })
@@ -204,6 +213,14 @@ class WebhookUtils {
             if (str == null) return "null"
             val jsonStr: String = Gson().toJson(str)
             return if (jsonStr.length >= 2) jsonStr.substring(1, jsonStr.length - 1) else jsonStr
+        }
+
+        @SuppressLint("SimpleDateFormat")
+        fun formatDateTime(currentTime: Date, format: String?): String {
+            val actualFormat = format?.removePrefix(":") ?: "yyyy-MM-dd HH:mm:ss"
+            val dateFormat = SimpleDateFormat(actualFormat)
+            dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+            return dateFormat.format(currentTime)
         }
 
     }

@@ -140,6 +140,7 @@ class WeworkAgentFragment : BaseFragment<FragmentSendersWeworkAgentBinding?>(), 
                         binding!!.sbProxyAuthenticator.isChecked = settingVo.proxyAuthenticator == true
                         binding!!.etProxyUsername.setText(settingVo.proxyUsername)
                         binding!!.etProxyPassword.setText(settingVo.proxyPassword)
+                        binding!!.etCustomizeAPI.setText(settingVo.customizeAPI)
                     }
                 }
             })
@@ -202,7 +203,8 @@ class WeworkAgentFragment : BaseFragment<FragmentSendersWeworkAgentBinding?>(), 
                         try {
                             val settingVo = checkSetting()
                             Log.d(TAG, settingVo.toString())
-                            val msgInfo = MsgInfo("sms", getString(R.string.test_phone_num), getString(R.string.test_sender_sms), Date(), getString(R.string.test_sim_info))
+                            val name = binding!!.etName.text.toString().trim().takeIf { it.isNotEmpty() } ?: getString(R.string.test_sender_name)
+                            val msgInfo = MsgInfo("sms", getString(R.string.test_phone_num), String.format(getString(R.string.test_sender_sms), name), Date(), getString(R.string.test_sim_info))
                             WeworkAgentUtils.sendMsg(settingVo, msgInfo)
                         } catch (e: Exception) {
                             e.printStackTrace()
@@ -292,7 +294,12 @@ class WeworkAgentFragment : BaseFragment<FragmentSendersWeworkAgentBinding?>(), 
             throw Exception(getString(R.string.invalid_username_or_password))
         }
 
-        return WeworkAgentSetting(corpID, agentID, secret, atAll, toUser, toParty, toTag, proxyType, proxyHost, proxyPort, proxyAuthenticator, proxyUsername, proxyPassword)
+        val customizeAPI = binding!!.etCustomizeAPI.text.toString().trim()
+        if (!CommonUtils.checkUrl(customizeAPI, true)) {
+            throw Exception(getString(R.string.invalid_customize_api))
+        }
+
+        return WeworkAgentSetting(corpID, agentID, secret, atAll, toUser, toParty, toTag, proxyType, proxyHost, proxyPort, proxyAuthenticator, proxyUsername, proxyPassword, customizeAPI)
     }
 
     override fun onDestroyView() {

@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "DEPRECATION")
 
 package com.idormy.sms.forwarder.utils
 
@@ -80,11 +80,13 @@ const val SP_SUBID_SIM1 = "subid_sim1"
 const val SP_SUBID_SIM2 = "subid_sim2"
 const val SP_EXTRA_SIM1 = "extra_sim1"
 const val SP_EXTRA_SIM2 = "extra_sim2"
+const val SP_SIM_STATE_RECEIVER = "enable_sim_state_receiver"
 const val SP_ENABLE_SMS_TEMPLATE = "enable_sms_template"
 const val SP_SMS_TEMPLATE = "sms_template"
 
 const val SP_ENABLE_HELP_TIP = "enable_help_tip"
 const val SP_PURE_CLIENT_MODE = "enable_pure_client_mode"
+const val SP_LOCATION_TAG = "enable_location_tag"
 
 const val SP_ENABLE_CACTUS = "enable_cactus"
 const val CACTUS_TIMER = "cactus_timer"
@@ -100,7 +102,9 @@ const val STATUS_ON = 1
 const val STATUS_OFF = 0
 const val FILED_TRANSPOND_ALL = "transpond_all"
 const val FILED_PHONE_NUM = "phone_num"
+const val FILED_CALL_TYPE = "call_type"
 const val FILED_PACKAGE_NAME = "package_name"
+const val FILED_UID = "uid"
 const val FILED_MSG_CONTENT = "msg_content"
 const val FILED_INFORM_CONTENT = "inform_content"
 const val FILED_MULTI_MATCH = "multi_match"
@@ -135,6 +139,8 @@ val FILED_MAP = object : HashMap<String, String>() {
         put("multi_match", getString(R.string.rule_multi_match))
         put("package_name", getString(R.string.rule_package_name))
         put("inform_content", getString(R.string.rule_inform_content))
+        put("call_type", getString(R.string.rule_call_type))
+        put("uid", getString(R.string.rule_uid))
     }
 }
 val CHECK_MAP = object : HashMap<String, String>() {
@@ -175,6 +181,17 @@ val BARK_ENCRYPTION_ALGORITHM_MAP = mapOf(
     "AES192/ECB/PKCS7Padding" to "AES192/ECB/PKCS7Padding",
     "AES256/CBC/PKCS7Padding" to "AES256/CBC/PKCS7Padding",
     "AES256/ECB/PKCS7Padding" to "AES256/ECB/PKCS7Padding",
+)
+
+//通话类型：1.来电挂机 2.去电挂机 3.未接来电 4.来电提醒 5.来电接通 6.去电拨出
+val CALL_TYPE_MAP = mapOf(
+    //"0" to getString(R.string.unknown_call),
+    "1" to getString(R.string.incoming_call_ended),
+    "2" to getString(R.string.outgoing_call_ended),
+    "3" to getString(R.string.missed_call),
+    "4" to getString(R.string.incoming_call_received),
+    "5" to getString(R.string.incoming_call_answered),
+    "6" to getString(R.string.outgoing_call_started),
 )
 
 //发送通道
@@ -311,6 +328,7 @@ var SENDER_FRAGMENT_LIST = listOf(
 
 //前台服务
 const val FRONT_NOTIFY_ID = 0x1010
+const val NOTIFICATION_ID = 101
 const val FRONT_CHANNEL_ID = "com.idormy.sms.forwarder"
 const val FRONT_CHANNEL_NAME = "SmsForwarder Foreground Service"
 
@@ -336,7 +354,6 @@ const val KEY_URL = "key_url"
 //主页监听时间
 const val EVENT_UPDATE_LOGS_TYPE = "key_logs_type"
 const val EVENT_UPDATE_RULE_TYPE = "key_status"
-const val EVENT_UPDATE_NOTIFY = "key_notify"
 
 const val KEY_SENDER_ID = "key_sender_id"
 const val KEY_SENDER_TYPE = "key_sender_type"
@@ -455,5 +472,37 @@ var CLIENT_FRAGMENT_LIST = listOf(
         "{\"\":\"\"}",
         CoreAnim.slide,
         R.drawable.icon_api_battery_query
+    ),
+)
+
+//自动任务
+var TASK_FRAGMENT_LIST = listOf(
+    PageInfo(
+        getString(R.string.dingtalk_robot),
+        "com.idormy.sms.forwarder.fragment.senders.DingtalkGroupRobotFragment",
+        "{\"\":\"\"}",
+        CoreAnim.slide,
+        R.drawable.icon_dingtalk
+    ),
+    PageInfo(
+        getString(R.string.email),
+        "com.idormy.sms.forwarder.fragment.senders.EmailFragment",
+        "{\"\":\"\"}",
+        CoreAnim.slide,
+        R.drawable.icon_email
+    ),
+    PageInfo(
+        getString(R.string.bark),
+        "com.idormy.sms.forwarder.fragment.senders.BarkFragment",
+        "{\"\":\"\"}",
+        CoreAnim.slide,
+        R.drawable.icon_bark
+    ),
+    PageInfo(
+        getString(R.string.webhook),
+        "com.idormy.sms.forwarder.fragment.senders.WebhookFragment",
+        "{\"\":\"\"}",
+        CoreAnim.slide,
+        R.drawable.icon_webhook
     ),
 )

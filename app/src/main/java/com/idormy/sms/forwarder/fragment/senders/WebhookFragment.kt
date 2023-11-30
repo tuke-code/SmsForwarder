@@ -128,6 +128,7 @@ class WebhookFragment : BaseFragment<FragmentSendersWebhookBinding?>(), View.OnC
                         binding!!.rgMethod.check(settingVo.getMethodCheckId())
                         binding!!.etWebServer.setText(settingVo.webServer)
                         binding!!.etSecret.setText(settingVo.secret)
+                        binding!!.etResponse.setText(settingVo.response)
                         binding!!.etWebParams.setText(settingVo.webParams)
                         //set header
                         if (settingVo.headers != null) {
@@ -171,13 +172,8 @@ class WebhookFragment : BaseFragment<FragmentSendersWebhookBinding?>(), View.OnC
                         try {
                             val settingVo = checkSetting()
                             Log.d(TAG, settingVo.toString())
-                            val msgInfo = MsgInfo(
-                                "sms",
-                                getString(R.string.test_phone_num),
-                                getString(R.string.test_sender_sms),
-                                Date(),
-                                getString(R.string.test_sim_info)
-                            )
+                            val name = binding!!.etName.text.toString().trim().takeIf { it.isNotEmpty() } ?: getString(R.string.test_sender_name)
+                            val msgInfo = MsgInfo("sms", getString(R.string.test_phone_num), String.format(getString(R.string.test_sender_sms), name), Date(), getString(R.string.test_sim_info))
                             WebhookUtils.sendMsg(settingVo, msgInfo)
                         } catch (e: Exception) {
                             e.printStackTrace()
@@ -246,10 +242,11 @@ class WebhookFragment : BaseFragment<FragmentSendersWebhookBinding?>(), View.OnC
             else -> "POST"
         }
         val secret = binding!!.etSecret.text.toString().trim()
+        val response = binding!!.etResponse.text.toString().trim()
         val webParams = binding!!.etWebParams.text.toString().trim()
         val headers = getHeadersFromHeaderItemMap(headerItemMap)
 
-        return WebhookSetting(method, webServer, secret, webParams, headers)
+        return WebhookSetting(method, webServer, secret, response, webParams, headers)
     }
 
 

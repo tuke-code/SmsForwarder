@@ -1,31 +1,72 @@
 package com.idormy.sms.forwarder.fragment
 
 import android.annotation.SuppressLint
-import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.CompoundButton
+import android.widget.EditText
+import android.widget.RadioGroup
+import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.idormy.sms.forwarder.App
+import com.idormy.sms.forwarder.App.Companion.CALL_TYPE_MAP
 import com.idormy.sms.forwarder.R
+import com.idormy.sms.forwarder.adapter.SenderRecyclerAdapter
+import com.idormy.sms.forwarder.adapter.base.ItemMoveCallback
 import com.idormy.sms.forwarder.adapter.spinner.AppListAdapterItem
 import com.idormy.sms.forwarder.adapter.spinner.AppListSpinnerAdapter
-import com.idormy.sms.forwarder.adapter.spinner.SenderAdapterItem
 import com.idormy.sms.forwarder.adapter.spinner.SenderSpinnerAdapter
+import com.idormy.sms.forwarder.adapter.spinner.SenderSpinnerItem
 import com.idormy.sms.forwarder.core.BaseFragment
-import com.idormy.sms.forwarder.database.AppDatabase
+import com.idormy.sms.forwarder.core.Core
 import com.idormy.sms.forwarder.database.entity.Rule
 import com.idormy.sms.forwarder.database.entity.Sender
 import com.idormy.sms.forwarder.database.viewmodel.BaseViewModelFactory
 import com.idormy.sms.forwarder.database.viewmodel.RuleViewModel
 import com.idormy.sms.forwarder.databinding.FragmentRulesEditBinding
 import com.idormy.sms.forwarder.entity.MsgInfo
-import com.idormy.sms.forwarder.utils.*
+import com.idormy.sms.forwarder.utils.CHECK_CONTAIN
+import com.idormy.sms.forwarder.utils.CHECK_END_WITH
+import com.idormy.sms.forwarder.utils.CHECK_IS
+import com.idormy.sms.forwarder.utils.CHECK_NOT_CONTAIN
+import com.idormy.sms.forwarder.utils.CHECK_REGEX
+import com.idormy.sms.forwarder.utils.CHECK_SIM_SLOT_1
+import com.idormy.sms.forwarder.utils.CHECK_SIM_SLOT_2
+import com.idormy.sms.forwarder.utils.CHECK_SIM_SLOT_ALL
+import com.idormy.sms.forwarder.utils.CHECK_START_WITH
+import com.idormy.sms.forwarder.utils.CommonUtils
+import com.idormy.sms.forwarder.utils.DataProvider
+import com.idormy.sms.forwarder.utils.EVENT_LOAD_APP_LIST
+import com.idormy.sms.forwarder.utils.EVENT_TOAST_ERROR
+import com.idormy.sms.forwarder.utils.FILED_CALL_TYPE
+import com.idormy.sms.forwarder.utils.FILED_INFORM_CONTENT
+import com.idormy.sms.forwarder.utils.FILED_MSG_CONTENT
+import com.idormy.sms.forwarder.utils.FILED_MULTI_MATCH
+import com.idormy.sms.forwarder.utils.FILED_PACKAGE_NAME
+import com.idormy.sms.forwarder.utils.FILED_PHONE_NUM
+import com.idormy.sms.forwarder.utils.FILED_TRANSPOND_ALL
+import com.idormy.sms.forwarder.utils.FILED_UID
+import com.idormy.sms.forwarder.utils.KEY_RULE_CLONE
+import com.idormy.sms.forwarder.utils.KEY_RULE_ID
+import com.idormy.sms.forwarder.utils.KEY_RULE_TYPE
+import com.idormy.sms.forwarder.utils.Log
+import com.idormy.sms.forwarder.utils.PhoneUtils
+import com.idormy.sms.forwarder.utils.SENDER_LOGIC_ALL
+import com.idormy.sms.forwarder.utils.SENDER_LOGIC_UNTIL_FAIL
+import com.idormy.sms.forwarder.utils.SENDER_LOGIC_UNTIL_SUCCESS
+import com.idormy.sms.forwarder.utils.STATUS_OFF
+import com.idormy.sms.forwarder.utils.STATUS_ON
+import com.idormy.sms.forwarder.utils.SendUtils
+import com.idormy.sms.forwarder.utils.SettingUtils
+import com.idormy.sms.forwarder.utils.XToastUtils
 import com.idormy.sms.forwarder.workers.LoadAppListWorker
 import com.jeremyliao.liveeventbus.LiveEventBus
 import com.xuexiang.xaop.annotation.SingleClick
@@ -33,7 +74,6 @@ import com.xuexiang.xpage.annotation.Page
 import com.xuexiang.xrouter.annotation.AutoWired
 import com.xuexiang.xrouter.launcher.XRouter
 import com.xuexiang.xrouter.utils.TextUtils
-import com.xuexiang.xui.utils.ResUtils
 import com.xuexiang.xui.widget.actionbar.TitleBar
 import com.xuexiang.xui.widget.dialog.materialdialog.DialogAction
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog
@@ -41,38 +81,40 @@ import com.xuexiang.xui.widget.picker.widget.builder.OptionsPickerBuilder
 import com.xuexiang.xui.widget.picker.widget.listener.OnOptionsSelectListener
 import com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
 import com.xuexiang.xutil.XUtil
+import com.xuexiang.xutil.resource.ResUtils.getColors
+import com.xuexiang.xutil.resource.ResUtils.getDrawable
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.*
-import java.util.*
+import java.util.Date
 
 @Page(name = "转发规则·编辑器")
-@Suppress("PrivatePropertyName", "DEPRECATION")
+@Suppress("PrivatePropertyName")
 class RulesEditFragment : BaseFragment<FragmentRulesEditBinding?>(), View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private val TAG: String = RulesEditFragment::class.java.simpleName
-    var titleBar: TitleBar? = null
+    private var titleBar: TitleBar? = null
     private val viewModel by viewModels<RuleViewModel> { BaseViewModelFactory(context) }
 
-    var callType = 1
-    var callTypeIndex = 0
+    private var callType = 1
+    private var callTypeIndex = 0
 
     //免打扰(禁用转发)时间段
     private val mTimeOption = DataProvider.timePeriodOption
     private var silentPeriodStart = 0
     private var silentPeriodEnd = 0
 
-    //当前发送通道
-    var senderId = 0L
-    var senderListSelected: MutableList<Sender> = mutableListOf()
-    private var senderItemMap = HashMap<Long, LinearLayout>(2)
-
-    //发送通道列表
-    var senderListAll: MutableList<Sender> = mutableListOf()
-    private val senderSpinnerList = ArrayList<SenderAdapterItem>()
+    //所有发送通道下拉框
+    private var senderListAll = mutableListOf<Sender>()
+    private val senderSpinnerList = mutableListOf<SenderSpinnerItem>()
     private lateinit var senderSpinnerAdapter: SenderSpinnerAdapter<*>
+
+    //已选发送通道列表
+    private var senderId = 0L
+    private var senderListSelected = mutableListOf<Sender>()
+    private lateinit var senderRecyclerView: RecyclerView
+    private lateinit var senderRecyclerAdapter: SenderRecyclerAdapter
 
     //已安装App信息列表
     private val appListSpinnerList = ArrayList<AppListAdapterItem>()
@@ -385,54 +427,21 @@ class RulesEditFragment : BaseFragment<FragmentRulesEditBinding?>(), View.OnClic
         } catch (e: Exception) {
             XToastUtils.error(e.message.toString())
             e.printStackTrace()
+            Log.e(TAG, e.toString())
         }
     }
 
     //初始化发送通道下拉框
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     private fun initSenderSpinner() {
         //免打扰(禁用转发)时间段
         binding!!.tvSilentPeriod.text = mTimeOption[silentPeriodStart] + " ~ " + mTimeOption[silentPeriodEnd]
 
-        AppDatabase.getInstance(requireContext()).senderDao().getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(object : SingleObserver<List<Sender>> {
-            override fun onSubscribe(d: Disposable) {}
-
-            override fun onError(e: Throwable) {
-                e.printStackTrace()
-            }
-
-            override fun onSuccess(senderList: List<Sender>) {
-                if (senderList.isEmpty()) {
-                    XToastUtils.error(R.string.add_sender_first)
-                    return
-                }
-
-                senderListAll = senderList as MutableList<Sender>
-                for (sender in senderList) {
-                    val name = if (sender.name.length > 20) sender.name.substring(0, 19) else sender.name
-                    senderSpinnerList.add(SenderAdapterItem(name, sender.imageId, sender.id, sender.status))
-                }
-                senderSpinnerAdapter = SenderSpinnerAdapter(senderSpinnerList)
-                    //.setTextColor(ResUtils.getColor(R.color.green))
-                    //.setTextSize(12F)
-                    .setIsFilterKey(true).setFilterColor("#EF5362").setBackgroundSelector(R.drawable.selector_custom_spinner_bg)
-                binding!!.spSender.setAdapter(senderSpinnerAdapter)
-
-                if (senderListSelected.isNotEmpty()) {
-                    for (sender in senderListSelected) {
-                        for (senderItem in senderSpinnerList) {
-                            if (sender.id == senderItem.id) {
-                                addSenderItemLinearLayout(senderItemMap, binding!!.layoutSenders, senderItem)
-                            }
-                        }
-                    }
-                }
-            }
-        })
+        //初始化发送通道下拉框
         binding!!.spSender.setOnItemClickListener { _: AdapterView<*>, _: View, position: Int, _: Long ->
             try {
-                val sender = senderSpinnerAdapter.getItemSource(position) as SenderAdapterItem
-                senderId = sender.id!!
+                val item = senderSpinnerAdapter.getItemSource(position) as SenderSpinnerItem
+                senderId = item.id!!
                 if (senderId > 0L) {
                     senderListSelected.forEach {
                         if (senderId == it.id) {
@@ -443,11 +452,14 @@ class RulesEditFragment : BaseFragment<FragmentRulesEditBinding?>(), View.OnClic
                     senderListAll.forEach {
                         if (senderId == it.id) {
                             senderListSelected.add(it)
-                            addSenderItemLinearLayout(senderItemMap, binding!!.layoutSenders, sender)
                         }
                     }
 
-                    if (STATUS_OFF == sender.status) {
+                    checkSenderLogicShow()
+
+                    senderRecyclerAdapter.notifyDataSetChanged()
+
+                    if (STATUS_OFF == item.status) {
                         XToastUtils.warning(getString(R.string.sender_disabled_tips))
                     }
                 }
@@ -455,60 +467,80 @@ class RulesEditFragment : BaseFragment<FragmentRulesEditBinding?>(), View.OnClic
                 XToastUtils.error(e.message.toString())
             }
         }
+
+        // 初始化已选发送通道列表 RecyclerView 和 Adapter
+        senderRecyclerView = binding!!.recyclerSenders
+        senderRecyclerAdapter = SenderRecyclerAdapter(senderListSelected, { position ->
+            senderListSelected.removeAt(position)
+            senderRecyclerAdapter.notifyItemRemoved(position)
+            senderRecyclerAdapter.notifyItemRangeChanged(position, senderListSelected.size) // 更新索引
+            checkSenderLogicShow()
+        })
+        senderRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = senderRecyclerAdapter
+        }
+        val senderMoveCallback = ItemMoveCallback(object : ItemMoveCallback.Listener {
+            override fun onItemMove(fromPosition: Int, toPosition: Int) {
+                Log.d(TAG, "onItemMove: $fromPosition $toPosition")
+                senderRecyclerAdapter.onItemMove(fromPosition, toPosition)
+                senderListSelected = senderRecyclerAdapter.itemList
+            }
+
+            override fun onDragFinished() {
+                senderListSelected = senderRecyclerAdapter.itemList
+                //senderRecyclerAdapter.notifyDataSetChanged()
+                Log.d(TAG, "onDragFinished: $senderListSelected")
+            }
+        })
+        val senderTouchHelper = ItemTouchHelper(senderMoveCallback)
+        senderTouchHelper.attachToRecyclerView(senderRecyclerView)
+        senderRecyclerAdapter.setTouchHelper(senderTouchHelper)
+
+        //获取发送通道列表
+        getSenderList()
     }
 
-    /**
-     * 动态增删header
-     *
-     * @param senderItemMap          管理item的map，用于删除指定header
-     * @param layoutSenders          需要挂载item的LinearLayout
-     * @param sender                 SenderAdapterItem
-     */
-    @SuppressLint("SetTextI18n")
-    private fun addSenderItemLinearLayout(
-        senderItemMap: MutableMap<Long, LinearLayout>, layoutSenders: LinearLayout, sender: SenderAdapterItem
-    ) {
-        val layoutSenderItem = View.inflate(requireContext(), R.layout.item_add_sender, null) as LinearLayout
-        val ivRemoveSender = layoutSenderItem.findViewById<ImageView>(R.id.iv_remove_sender)
-        val ivSenderImage = layoutSenderItem.findViewById<ImageView>(R.id.iv_sender_image)
-        val ivSenderStatus = layoutSenderItem.findViewById<ImageView>(R.id.iv_sender_status)
-        val tvSenderName = layoutSenderItem.findViewById<TextView>(R.id.tv_sender_name)
+    //获取发送通道列表
+    private fun getSenderList() {
+        Core.sender.getAll().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(object : SingleObserver<List<Sender>> {
+            override fun onSubscribe(d: Disposable) {}
 
-        ivSenderImage.setImageDrawable(sender.icon)
-        ivSenderStatus.setImageDrawable(ResUtils.getDrawable(if (STATUS_OFF == sender.status) R.drawable.icon_off else R.drawable.icon_on))
-        val senderItemId = sender.id as Long
-        tvSenderName.text = "ID-$senderItemId：${sender.title}"
+            override fun onError(e: Throwable) {
+                e.printStackTrace()
+                Log.e(TAG, "getSenderList error: ${e.message}")
+            }
 
-        ivRemoveSender.tag = senderItemId
-        ivRemoveSender.setOnClickListener { view2: View ->
-            val tagId = view2.tag as Long
-            layoutSenders.removeView(senderItemMap[tagId])
-            senderItemMap.remove(tagId)
-            //senderListSelected.removeIf { it.id == tagId }
-            for (it in senderListSelected) {
-                if (it.id == tagId) {
-                    senderListSelected -= it
-                    break
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onSuccess(senderList: List<Sender>) {
+                if (senderList.isEmpty()) {
+                    XToastUtils.error(R.string.add_sender_first)
+                    return
                 }
+
+                senderSpinnerList.clear()
+                senderListAll = senderList as MutableList<Sender>
+                for (sender in senderList) {
+                    val name = if (sender.name.length > 20) sender.name.substring(0, 19) else sender.name
+                    senderSpinnerList.add(SenderSpinnerItem(name, getDrawable(sender.imageId), sender.id, sender.status))
+                }
+                senderSpinnerAdapter = SenderSpinnerAdapter(senderSpinnerList).setIsFilterKey(true).setFilterColor("#EF5362").setBackgroundSelector(R.drawable.selector_custom_spinner_bg)
+                binding!!.spSender.setAdapter(senderSpinnerAdapter)
+                //senderSpinnerAdapter.notifyDataSetChanged()
+
+                //更新senderListSelected的状态与名称
+                senderListSelected.forEach {
+                    senderListAll.forEach { sender ->
+                        if (it.id == sender.id) {
+                            it.name = sender.name
+                            it.status = sender.status
+                        }
+                    }
+                }
+                senderRecyclerAdapter.notifyDataSetChanged()
+
             }
-            Log.d(TAG, senderListSelected.count().toString())
-            Log.d(TAG, senderListSelected.toString())
-            if (senderListSelected.isEmpty()) senderId = 0L
-            if (senderListSelected.count() > 1) {
-                binding!!.layoutSenderLogic.visibility = View.VISIBLE
-            } else {
-                binding!!.layoutSenderLogic.visibility = View.GONE
-                binding!!.rgSenderLogic.check(R.id.rb_sender_logic_all)
-            }
-        }
-        layoutSenders.addView(layoutSenderItem)
-        senderItemMap[senderItemId] = layoutSenderItem
-        if (senderListSelected.count() > 1) {
-            binding!!.layoutSenderLogic.visibility = View.VISIBLE
-        } else {
-            binding!!.layoutSenderLogic.visibility = View.GONE
-            binding!!.rgSenderLogic.check(R.id.rb_sender_logic_all)
-        }
+        })
     }
 
     //初始化APP下拉列表
@@ -558,11 +590,12 @@ class RulesEditFragment : BaseFragment<FragmentRulesEditBinding?>(), View.OnClic
 
     //初始化表单
     private fun initForm() {
-        AppDatabase.getInstance(requireContext()).ruleDao().get(ruleId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(object : SingleObserver<Rule> {
+        Core.rule.get(ruleId).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(object : SingleObserver<Rule> {
             override fun onSubscribe(d: Disposable) {}
 
             override fun onError(e: Throwable) {
                 e.printStackTrace()
+                Log.e(TAG, e.toString())
             }
 
             override fun onSuccess(rule: Rule) {
@@ -570,6 +603,7 @@ class RulesEditFragment : BaseFragment<FragmentRulesEditBinding?>(), View.OnClic
                 rule.senderList.forEach {
                     senderId = it.id
                     senderListSelected.add(it)
+                    Log.d(TAG, it.toString())
                 }
 
                 if (isClone) {
@@ -580,6 +614,7 @@ class RulesEditFragment : BaseFragment<FragmentRulesEditBinding?>(), View.OnClic
                 }
                 Log.d(TAG, rule.toString())
 
+                checkSenderLogicShow()
                 binding!!.rgSenderLogic.check(rule.getSenderLogicCheckId())
                 binding!!.rgSimSlot.check(rule.getSimSlotCheckId())
                 binding!!.rgFiled.check(rule.getFiledCheckId())
@@ -606,6 +641,15 @@ class RulesEditFragment : BaseFragment<FragmentRulesEditBinding?>(), View.OnClic
                 initSenderSpinner()
             }
         })
+    }
+
+    private fun checkSenderLogicShow() {
+        if (senderListSelected.size > 1) {
+            binding!!.layoutSenderLogic.visibility = View.VISIBLE
+        } else {
+            binding!!.layoutSenderLogic.visibility = View.GONE
+            binding!!.rgSenderLogic.check(R.id.rb_sender_logic_all)
+        }
     }
 
     //提交前检查表单
@@ -648,6 +692,10 @@ class RulesEditFragment : BaseFragment<FragmentRulesEditBinding?>(), View.OnClic
         }
 
         val smsTemplate = binding!!.etSmsTemplate.text.toString().trim()
+        val checkResult = CommonUtils.checkTemplateTag(smsTemplate)
+        if (checkResult.isNotEmpty()) {
+            throw Exception(checkResult)
+        }
         val regexReplace = binding!!.etRegexReplace.text.toString().trim()
         val lineNum = checkRegexReplace(regexReplace)
         if (lineNum > 0) {
@@ -666,9 +714,7 @@ class RulesEditFragment : BaseFragment<FragmentRulesEditBinding?>(), View.OnClic
             else -> CHECK_SIM_SLOT_ALL
         }
         val status = if (binding!!.sbStatus.isChecked) STATUS_ON else STATUS_OFF
-        //if (status == STATUS_OFF) {
-        //    throw Exception(getString(R.string.invalid_rule_status))
-        //}
+
         return Rule(
             ruleId,
             ruleType,
@@ -714,6 +760,14 @@ class RulesEditFragment : BaseFragment<FragmentRulesEditBinding?>(), View.OnClic
         for (line in lineArray!!) {
             val position = line.indexOf("===")
             if (position < 1) return lineNum
+
+            // 校验正则表达式部分是否合法
+            try {
+                line.substring(0, position).toRegex()
+            } catch (e: Exception) {
+                return lineNum
+            }
+
             lineNum++
         }
         return 0
@@ -763,7 +817,7 @@ class RulesEditFragment : BaseFragment<FragmentRulesEditBinding?>(), View.OnClic
             spCallType.selectedIndex = callTypeIndexTest
         }
 
-        MaterialDialog.Builder(requireContext()).iconRes(android.R.drawable.ic_dialog_email).title(R.string.rule_tester).customView(dialogTest, true).cancelable(false).autoDismiss(false).neutralText(R.string.action_back).neutralColor(ResUtils.getColors(R.color.darkGrey)).onNeutral { dialog: MaterialDialog?, _: DialogAction? ->
+        MaterialDialog.Builder(requireContext()).iconRes(android.R.drawable.ic_dialog_email).title(R.string.rule_tester).customView(dialogTest, true).cancelable(false).autoDismiss(false).neutralText(R.string.action_back).neutralColor(getColors(R.color.darkGrey)).onNeutral { dialog: MaterialDialog?, _: DialogAction? ->
             dialog?.dismiss()
         }.positiveText(R.string.action_test).onPositive { _: MaterialDialog?, _: DialogAction? ->
             try {
@@ -795,10 +849,10 @@ class RulesEditFragment : BaseFragment<FragmentRulesEditBinding?>(), View.OnClic
                 if (ruleType == "call") {
                     val phoneNumber = etFrom.text.toString()
                     val contacts = PhoneUtils.getContactByNumber(phoneNumber)
-                    val contactName = if (contacts.isNotEmpty()) contacts[0].name else ResUtils.getString(R.string.unknown_number)
-                    msg.append(ResUtils.getString(R.string.contact)).append(contactName).append("\n")
-                    msg.append(ResUtils.getString(R.string.mandatory_type))
-                    msg.append(CALL_TYPE_MAP[callType.toString()] ?: ResUtils.getString(R.string.unknown_call))
+                    val contactName = if (contacts.isNotEmpty()) contacts[0].name else getString(R.string.unknown_number)
+                    msg.append(getString(R.string.contact)).append(contactName).append("\n")
+                    msg.append(getString(R.string.mandatory_type))
+                    msg.append(CALL_TYPE_MAP[callType.toString()] ?: getString(R.string.unknown_call))
                 } else {
                     msg.append(etContent.text.toString())
                 }
@@ -813,9 +867,8 @@ class RulesEditFragment : BaseFragment<FragmentRulesEditBinding?>(), View.OnClic
                         SendUtils.sendMsgSender(msgInfo, rule)
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        if (Looper.myLooper() == null) Looper.prepare()
-                        XToastUtils.error(e.message.toString())
-                        Looper.loop()
+                        Log.e(TAG, e.toString())
+                        LiveEventBus.get(EVENT_TOAST_ERROR, String::class.java).post(e.message.toString())
                     }
                 }.start()
 

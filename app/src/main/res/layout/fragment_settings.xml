@@ -744,6 +744,44 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layout_enable_close_to_earpiece_turn_off_screen"
+                style="@style/BarStyle.Switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/close_to_earpiece_turn_off_screen"
+                        android:textStyle="bold"
+                        tools:ignore="RelativeOverlap" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/close_to_earpiece_turn_off_screen_tips"
+                        android:textSize="@dimen/text_size_mini"
+                        tools:ignore="SmallSp" />
+
+                </LinearLayout>
+
+                <com.xuexiang.xui.widget.button.switchbutton.SwitchButton
+                    android:id="@+id/sb_enable_close_to_earpiece_turn_off_screen"
+                    style="@style/SwitchButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 style="@style/BarStyle.Switch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -1226,7 +1264,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/enabe_cactus_tips"
+                        android:text="@string/enable_cactus_tips"
                         android:textSize="@dimen/text_size_mini"
                         tools:ignore="SmallSp" />
 
@@ -1567,6 +1605,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layout_sim2"
                 style="@style/BarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -1741,41 +1780,13 @@
                     android:text=""
                     tools:ignore="RtlHardcoded,SpeakableTextPresentCheck" />
 
-                <LinearLayout
+                <GridLayout
+                    android:id="@+id/gl_sms_template"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.xuexiang.xui.widget.button.shadowbutton.RippleShadowShadowButton
-                        android:id="@+id/bt_insert_sender"
-                        style="@style/insertButtonStyle"
-                        android:text="@string/insert_sender" />
-
-                    <com.xuexiang.xui.widget.button.shadowbutton.RippleShadowShadowButton
-                        android:id="@+id/bt_insert_content"
-                        style="@style/insertButtonStyle"
-                        android:layout_marginStart="3dp"
-                        android:text="@string/insert_content" />
-
-                    <com.xuexiang.xui.widget.button.shadowbutton.RippleShadowShadowButton
-                        android:id="@+id/bt_insert_extra"
-                        style="@style/insertButtonStyle"
-                        android:layout_marginStart="3dp"
-                        android:text="@string/insert_extra" />
-
-                    <com.xuexiang.xui.widget.button.shadowbutton.RippleShadowShadowButton
-                        android:id="@+id/bt_insert_time"
-                        style="@style/insertButtonStyle"
-                        android:layout_marginStart="3dp"
-                        android:text="@string/insert_time" />
-
-                    <com.xuexiang.xui.widget.button.shadowbutton.RippleShadowShadowButton
-                        android:id="@+id/bt_insert_device_name"
-                        style="@style/insertButtonStyle"
-                        android:layout_marginStart="3dp"
-                        android:text="@string/insert_device_name" />
-
-                </LinearLayout>
+                    android:layout_gravity="center"
+                    android:columnCount="4"
+                    android:orientation="horizontal" />
 
             </LinearLayout>
 

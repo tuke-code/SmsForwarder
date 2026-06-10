@@ -617,6 +617,7 @@
     <string name="bark_encryption_key_error2">加密密钥必须是24位</string>
     <string name="bark_encryption_key_error3">加密密钥必须是32位</string>
     <string name="bark_encryption_key_error4">偏移向量必须是16位 或 留空</string>
+    <string name="bark_encryption_key_error5">GCM偏移向量必须是12位 或 留空</string>
 
     <string name="from_email_hint">填写 @ 前面的用户名</string>
     <string name="other_mail_type">其他邮箱</string>
@@ -651,6 +652,8 @@
     <string name="select_sender_type">请选择发送通道类型</string>
     <string name="feishu_webhook_hint">群机器人→Webhook 地址</string>
     <string name="feishu_secret_hint">群机器人→安全设置→签名校验</string>
+    <string name="feishu_at_open_ids">@ 指定人 (open_id 或 user_id)</string>
+    <string name="feishu_at_open_ids_tip">填写用户的 open_id 或 user_id，多个用英文逗号分隔，留空则不@</string>
     <string name="pushplus_token_hint">请前往对应的官网地址获取</string>
     <string name="choose_rule">下拉选择，关键字模糊匹配</string>
     <string name="choose_sender">下拉选择，关键字模糊匹配</string>

@@ -29,6 +29,7 @@
     <string name="insert_tag_net_type">Network Status</string>
     <string name="insert_tag_contact_name">Contact Name</string>
     <string name="insert_tag_phone_area">Phone Area</string>
+    <string name="insert_tag_rule_title">Rule Title</string>
 
     <string name="type_param_sms">Sms</string>
     <string name="type_param_call">Call</string>

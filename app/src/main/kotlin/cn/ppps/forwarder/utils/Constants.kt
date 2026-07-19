@@ -185,6 +185,13 @@ const val KEY_RULE_TYPE = "key_rule_type"
 const val KEY_RULE_CLONE = "key_rule_clone"
 const val KEY_DEFAULT_SELECTION = "key_default_selection"
 
+//转发规则测试弹窗填写内容缓存（key需拼接ruleType后缀区分）
+const val SP_RULE_TEST_SIM_SLOT = "rule_test_sim_slot_"
+const val SP_RULE_TEST_FROM = "rule_test_from_"
+const val SP_RULE_TEST_TITLE = "rule_test_title_"
+const val SP_RULE_TEST_CONTENT = "rule_test_content_"
+const val SP_RULE_TEST_CALL_TYPE = "rule_test_call_type_"
+
 const val KEY_TASK_ID = "key_task_id"
 const val KEY_TASK_TYPE = "key_task_type"
 const val KEY_TASK_CLONE = "key_task_clone"

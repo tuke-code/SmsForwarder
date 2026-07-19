@@ -3,7 +3,6 @@ package cn.ppps.forwarder.utils.sender
 import android.annotation.SuppressLint
 import android.text.TextUtils
 import android.util.Base64
-import com.google.gson.Gson
 import cn.ppps.forwarder.database.entity.Rule
 import cn.ppps.forwarder.entity.MsgInfo
 import cn.ppps.forwarder.entity.setting.WebhookSetting
@@ -14,6 +13,7 @@ import cn.ppps.forwarder.utils.SettingUtils
 import cn.ppps.forwarder.utils.interceptor.BasicAuthInterceptor
 import cn.ppps.forwarder.utils.interceptor.LoggingInterceptor
 import cn.ppps.forwarder.utils.interceptor.NoContentInterceptor
+import com.google.gson.Gson
 import com.xuexiang.xhttp2.XHttp
 import com.xuexiang.xhttp2.callback.SimpleCallBack
 import com.xuexiang.xhttp2.exception.ApiException
@@ -47,7 +47,7 @@ class WebhookUtils {
         ) {
             val from: String = msgInfo.from
             val content: String = if (rule != null) {
-                msgInfo.getContentForSend(rule.smsTemplate, rule.regexReplace)
+                msgInfo.getContentForSend(rule.smsTemplate, rule.regexReplace, rule.title)
             } else {
                 msgInfo.getContentForSend(SettingUtils.smsTemplate)
             }
@@ -119,7 +119,7 @@ class WebhookUtils {
                 Log.d(TAG, "method = GET, Url = $requestUrl")
                 XHttp.get(requestUrl).keepJson(true)
             } else if (setting.method == "GET" && !TextUtils.isEmpty(webParams)) {
-                webParams = msgInfo.replaceTemplate(webParams, "", "URLEncoder")
+                webParams = msgInfo.replaceTemplate(webParams, "", "URLEncoder", rule?.title ?: "")
                 webParams = webParams.replace("[from]", URLEncoder.encode(from, "UTF-8"))
                     .replace("[content]", URLEncoder.encode(content, "UTF-8"))
                     .replace("[msg]", URLEncoder.encode(content, "UTF-8"))
@@ -145,7 +145,7 @@ class WebhookUtils {
                 Log.d(TAG, "method = GET, Url = $requestUrl")
                 XHttp.get(requestUrl).keepJson(true)
             } else if (webParams.isNotEmpty() && (isJson || isText || webParams.startsWith("{"))) {
-                webParams = msgInfo.replaceTemplate(webParams, "", "Gson")
+                webParams = msgInfo.replaceTemplate(webParams, "", "Gson", rule?.title ?: "")
                 val bodyMsg = webParams.replace("[from]", from)
                     .replace("[content]", escapeJson(content))
                     .replace("[msg]", escapeJson(content))
@@ -185,7 +185,7 @@ class WebhookUtils {
                     "PATCH" -> XHttp.patch(requestUrl).keepJson(true)
                     else -> XHttp.post(requestUrl).keepJson(true)
                 }
-                webParams = msgInfo.replaceTemplate(webParams)
+                webParams = msgInfo.replaceTemplate(webParams, "", "", rule?.title ?: "")
                 webParams.trim('&').split("&").forEach {
                     val sepIndex = it.indexOf("=")
                     if (sepIndex != -1) {

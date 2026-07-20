@@ -17,6 +17,7 @@ import com.google.gson.Gson
 import com.xuexiang.xhttp2.XHttp
 import com.xuexiang.xhttp2.callback.SimpleCallBack
 import com.xuexiang.xhttp2.exception.ApiException
+import com.xuexiang.xutil.security.CipherUtils
 import okhttp3.Credentials
 import okhttp3.Response
 import okhttp3.Route
@@ -77,6 +78,8 @@ class WebhookUtils {
             }
 
             var webParams = setting.webParams.trim()
+            //提取 webParams 中 md5([变量名1]+[变量名2]+[变量名3]+'自定义内容') 替换为 md5 值
+            webParams = replaceMd5Template(webParams, msgInfo, from, content, orgContent, deviceMark, appVersion, simInfo, receiveTimeTag, timestamp, sign)
 
             //支持HTTP基本认证(Basic Authentication)
             val regex = "^(https?://)([^:]+):([^@]+)@(.+)"
@@ -296,6 +299,38 @@ class WebhookUtils {
             val actualFormat = format?.removePrefix(":") ?: "yyyy-MM-dd HH:mm:ss"
             val dateFormat = SimpleDateFormat(actualFormat)
             return dateFormat.format(currentTime)
+        }
+
+        //提取 webParams 中 md5([变量名1]+[变量名2]+[变量名3]+'自定义内容') 替换为 md5 值
+        fun replaceMd5Template(
+            webParams: String, msgInfo: MsgInfo,
+            from: String, content: String, orgContent: String, deviceMark: String, appVersion: String, simInfo: String,
+            receiveTimeTag: Regex, timestamp: Long, sign: String
+        ): String {
+            val regex = Regex("md5\\((.*?)\\)")
+            //去掉拼接符 + 并去掉自定义内容的单引号（引号内的 + 保留）
+            val separatorRegex = Regex("'(.*?)'|\\+")
+            return regex.replace(webParams) { matchResult ->
+                val md5String = matchResult.groupValues[1].replace(separatorRegex) { it.groupValues[1] }
+                var replacedContent = msgInfo.replaceTemplate(md5String, "", "", "")
+                replacedContent = replacedContent
+                    .replace("[from]", from)
+                    .replace("[content]", content)
+                    .replace("[msg]", content)
+                    .replace("[org_content]", orgContent)
+                    .replace("[device_mark]", deviceMark)
+                    .replace("[app_version]", appVersion)
+                    .replace("[title]", simInfo)
+                    .replace("[card_slot]", simInfo)
+                    .replace("[timestamp]", timestamp.toString())
+                    .replace("[sign]", sign)
+                    .replace(receiveTimeTag) {
+                        val format = it.groups[2]?.value
+                        formatDateTime(msgInfo.date, format)
+                    }
+                val md5Value = CipherUtils.md5(replacedContent)
+                md5Value
+            }
         }
 
     }

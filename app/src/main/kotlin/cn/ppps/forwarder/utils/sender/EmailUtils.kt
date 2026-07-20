@@ -1,5 +1,6 @@
 package cn.ppps.forwarder.utils.sender
 
+import cn.ppps.forwarder.App
 import cn.ppps.forwarder.R
 import cn.ppps.forwarder.database.entity.Rule
 import cn.ppps.forwarder.entity.MsgInfo
@@ -9,6 +10,7 @@ import cn.ppps.forwarder.utils.Log
 import cn.ppps.forwarder.utils.SendUtils
 import cn.ppps.forwarder.utils.SettingUtils
 import cn.ppps.forwarder.utils.mail.EmailSender
+import cn.ppps.forwarder.utils.mail.OpenKeychainHelper
 import com.xuexiang.xutil.resource.ResUtils.getString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -233,6 +235,34 @@ class EmailUtils {
 
                         //逐一发送加密邮件
                         val recipientsWithoutCert = mutableListOf<String>()
+                        if (setting.encryptionProtocol == "OpenKeychain") {
+                            //OpenKeychain：公钥按收件人邮箱由OpenKeychain自动匹配，一次加密发送给全部收件人
+                            val openKeychainHelper = OpenKeychainHelper(App.context)
+                            try {
+                                sendWithRetry { emailListener ->
+                                    EmailSender(
+                                        host,
+                                        port,
+                                        from,
+                                        password,
+                                        fromAlias,
+                                        nickname,
+                                        title,
+                                        content,
+                                        toAddress = setting.recipients.keys.toMutableList(),
+                                        listener = emailListener,
+                                        openSSL = openSSL,
+                                        startTls = startTls,
+                                        encryptionProtocol = setting.encryptionProtocol,
+                                        openKeychainHelper = openKeychainHelper,
+                                        openKeychainSignKeyId = setting.openKeychainSignKeyId,
+                                    )
+                                }
+                            } finally {
+                                openKeychainHelper.unbind()
+                            }
+                            return@launch
+                        }
                         setting.recipients.forEach { (email, cert) ->
                             val keystoreBase64 = cert.first
                             val keystorePassword = cert.second

@@ -274,8 +274,18 @@
     <string name="email_to_smime_tips">Tip: Click to add recipients and S/MIME encryption public keys (opt.).</string>
     <string name="email_to_openpgp">Recipients &amp; OpenPGP Public Cert.</string>
     <string name="email_to_openpgp_tips">Tip: Click to add recipients and OpenPGP public keys (opt.).</string>
+    <string name="email_to_openkeychain">Recipients (keys auto-matched by OpenKeychain)</string>
+    <string name="email_to_openkeychain_tips">Tip: Encryption keys are auto-matched by recipient email in OpenKeychain. Import their public keys into OpenKeychain first.</string>
     <string name="sender_smime_keystore">Sender S/MIME Cert. (Opt.)</string>
     <string name="sender_openpgp_keystore">Sender OpenPGP Cert. (Opt.)</string>
+    <string name="sender_openkeychain_sign_key">Sender OpenKeychain Signing Key (Opt.)</string>
+    <string name="openkeychain_sign_key_none">Not selected (encrypt only)</string>
+    <string name="openkeychain_select_sign_key">Select Signing Key</string>
+    <string name="openkeychain_clear_sign_key">Clear</string>
+    <string name="openkeychain_sign_key_selected">Signing key selected: %s</string>
+    <string name="openkeychain_sign_key_tips">Tip: If the signing key has a passphrase, enable passphrase caching in OpenKeychain, otherwise background signing will fail.</string>
+    <string name="openkeychain_not_installed">OpenKeychain is not installed. Get it at https://www.openkeychain.org</string>
+    <string name="openkeychain_check_failed">OpenKeychain encryption pre-check failed: %s</string>
     <string name="invalid_sender_keystore">Invalid Sender Signing Private Key</string>
     <string name="recipient_email">Recipient</string>
     <string name="keystore_base64">Specified Cert.</string>
@@ -424,6 +434,7 @@
     <string name="plain">Plain</string>
     <string name="smime">S/MIME</string>
     <string name="openpgp">OpenPGP</string>
+    <string name="openkeychain">OpenKeychain</string>
     <string name="proxy_settings">Proxy Settings</string>
     <string name="proxy_none">None</string>
     <string name="proxy_http">HTTP</string>

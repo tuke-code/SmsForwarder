@@ -305,8 +305,18 @@
     <string name="email_to_smime_tips">Tip: 点击按钮添加收件人邮箱、S/MIME加密公钥（可选）</string>
     <string name="email_to_openpgp">收件人邮箱 &amp; OpenPGP加密公钥</string>
     <string name="email_to_openpgp_tips">Tip: 点击按钮添加收件人邮箱、OpenPGP加密公钥（可选）</string>
+    <string name="email_to_openkeychain">收件人邮箱（OpenKeychain自动匹配公钥）</string>
+    <string name="email_to_openkeychain_tips">Tip: 加密公钥由OpenKeychain按收件人邮箱自动匹配，需先在OpenKeychain中导入对应公钥</string>
     <string name="sender_smime_keystore">发件人S/MIME签名私钥（可选）</string>
     <string name="sender_openpgp_keystore">发件人OpenPGP签名私钥（可选）</string>
+    <string name="sender_openkeychain_sign_key">发件人OpenKeychain签名密钥（可选）</string>
+    <string name="openkeychain_sign_key_none">未选择（只加密不签名）</string>
+    <string name="openkeychain_select_sign_key">选择签名密钥</string>
+    <string name="openkeychain_clear_sign_key">清除</string>
+    <string name="openkeychain_sign_key_selected">已选择签名密钥：%s</string>
+    <string name="openkeychain_sign_key_tips">Tip: 签名密钥若设有密码，请在OpenKeychain中开启密码缓存，否则后台转发时签名会失败</string>
+    <string name="openkeychain_not_installed">未安装OpenKeychain，请先安装：https://www.openkeychain.org</string>
+    <string name="openkeychain_check_failed">OpenKeychain加密预检失败：%s</string>
     <string name="invalid_sender_keystore">发件人签名私钥无效</string>
     <string name="recipient_email">收件人邮箱</string>
     <string name="keystore_base64">指定证书</string>
@@ -455,6 +465,7 @@
     <string name="plain">明文</string>
     <string name="smime">S/MIME</string>
     <string name="openpgp">OpenPGP</string>
+    <string name="openkeychain">OpenKeychain</string>
     <string name="proxy_settings">代理设置</string>
     <string name="proxy_none">无代理</string>
     <string name="proxy_http">HTTP</string>

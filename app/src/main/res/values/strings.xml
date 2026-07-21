@@ -839,6 +839,15 @@
     <string name="battery_health">健康度：%s</string>
     <string name="battery_plugged">充电器：%s</string>
     <string name="battery_plugged_title">充电器</string>
+    <string name="battery_voltage_title">电池电压（mV）</string>
+    <string name="battery_temperature_title">电池温度（℃）</string>
+    <string name="battery_health_title">电池健康度</string>
+    <string name="battery_health_changed">，【电池健康度】发生变化：</string>
+    <string name="battery_voltage_range_error">最低电压不能大于最高电压</string>
+    <string name="battery_temperature_range_error">最低温度不能大于最高温度</string>
+    <string name="condition_match_type_title">条件组合方式</string>
+    <string name="condition_match_all">全部满足</string>
+    <string name="condition_match_any">任一满足</string>
 
     <string name="server_history">历史记录</string>
     <string name="server_test">登录服务</string>

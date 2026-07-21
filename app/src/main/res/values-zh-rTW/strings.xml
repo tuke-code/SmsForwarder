@@ -809,6 +809,15 @@
     <string name="battery_health">健康度：%s</string>
     <string name="battery_plugged">充電器：%s</string>
     <string name="battery_plugged_title">充電器</string>
+    <string name="battery_voltage_title">電池電壓（mV）</string>
+    <string name="battery_temperature_title">電池溫度（℃）</string>
+    <string name="battery_health_title">電池健康度</string>
+    <string name="battery_health_changed">，【電池健康度】發生變化：</string>
+    <string name="battery_voltage_range_error">最低電壓不能大於最高電壓</string>
+    <string name="battery_temperature_range_error">最低溫度不能大於最高溫度</string>
+    <string name="condition_match_type_title">條件組合方式</string>
+    <string name="condition_match_all">全部滿足</string>
+    <string name="condition_match_any">任一滿足</string>
 
     <string name="server_history">歷史記錄</string>
     <string name="server_test">登入服務</string>

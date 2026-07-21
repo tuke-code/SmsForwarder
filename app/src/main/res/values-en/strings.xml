@@ -808,6 +808,15 @@
     <string name="battery_health">Health: %s</string>
     <string name="battery_plugged">Plugged: %s</string>
     <string name="battery_plugged_title">Plugged</string>
+    <string name="battery_voltage_title">Voltage (mV)</string>
+    <string name="battery_temperature_title">Temperature (℃)</string>
+    <string name="battery_health_title">Health</string>
+    <string name="battery_health_changed">, [Battery health] changes: </string>
+    <string name="battery_voltage_range_error">Min voltage cannot exceed max voltage</string>
+    <string name="battery_temperature_range_error">Min temperature cannot exceed max temperature</string>
+    <string name="condition_match_type_title">Match type</string>
+    <string name="condition_match_all">Match all</string>
+    <string name="condition_match_any">Match any</string>
 
     <string name="server_history">History</string>
     <string name="server_test">Login</string>
